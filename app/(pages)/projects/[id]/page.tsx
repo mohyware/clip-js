@@ -85,16 +85,18 @@ export default function Project({ params }: { params: { id: string } }) {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen select-none">
             {/* Loading screen */}
-            {isLoading ? (
-                <div className="fixed inset-0 flex items-center bg-black bg-opacity-50 justify-center z-50">
-                    <div className="bg-black bg-opacity-70 p-6 rounded-lg flex flex-col items-center">
-                        <div className="w-16 h-16 border-4 border-t-white border-r-white border-opacity-30 border-t-opacity-100 rounded-full animate-spin"></div>
-                        <p className="mt-4 text-white text-lg">Loading project...</p>
+            {
+                isLoading ? (
+                    <div className="fixed inset-0 flex items-center bg-black bg-opacity-50 justify-center z-50">
+                        <div className="bg-black bg-opacity-70 p-6 rounded-lg flex flex-col items-center">
+                            <div className="w-16 h-16 border-4 border-t-white border-r-white border-opacity-30 border-t-opacity-100 rounded-full animate-spin"></div>
+                            <p className="mt-4 text-white text-lg">Loading project...</p>
+                        </div>
                     </div>
-                </div>
-            ) : null}
+                ) : null
+            }
             <div className="flex flex-1 overflow-hidden">
                 {/* Left Sidebar - Buttons */}
                 <div className="flex-[0.1] min-w-[60px] max-w-[100px] border-r border-gray-700 overflow-y-auto p-4">
@@ -207,6 +209,6 @@ export default function Project({ params }: { params: { id: string } }) {
                 </div>
                 <Timeline />
             </div>
-        </div>
+        </div >
     );
 }

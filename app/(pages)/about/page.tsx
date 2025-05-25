@@ -1,5 +1,5 @@
 'use client'
-import { Coffee, Github, Twitter, Linkedin, ExternalLink } from "lucide-react";
+import { Github, Twitter, Linkedin, Heart } from "lucide-react";
 import { useState } from "react";
 
 export default function AboutMe() {
@@ -37,15 +37,15 @@ export default function AboutMe() {
 
                 <div className="mt-10">
                     <a
-                        href="https://www.buymeacoffee.com/mohyware"
+                        href="https://github.com/sponsors/mohyware"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`inline-flex items-center mx-auto px-5 py-3 ${hovered ? "bg-yellow-500" : "bg-yellow-600"} hover:bg-yellow-500 rounded-lg text-gray-900 font-bold transition-all transform ${hovered ? "scale-105" : "scale-100"}`}
+                        className={`inline-flex items-center mx-auto px-5 py-3 ${hovered ? "bg-pink-500" : "bg-pink-600"} hover:bg-pink-500 rounded-lg text-gray-900 font-bold transition-all transform ${hovered ? "scale-105" : "scale-100"}`}
                         onMouseEnter={() => setHovered(true)}
                         onMouseLeave={() => setHovered(false)}
                     >
-                        <Coffee size={20} className="mr-2" />
-                        Buy me a coffee
+                        <Heart size={20} className="mr-2" />
+                        Sponsor on GitHub
                     </a>
 
                 </div>

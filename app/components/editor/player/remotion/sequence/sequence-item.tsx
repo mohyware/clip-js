@@ -60,8 +60,8 @@ export const SequenceItem: Record<
                     className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-${item.type}`}
                     style={{
                         pointerEvents: "auto",
-                        top: item.x,
-                        left: item.y,
+                        top: item.y,
+                        left: item.x,
                         width: item.width || "100%",
                         height: item.height || "auto",
                         transform: "none",
@@ -128,8 +128,8 @@ export const SequenceItem: Record<
                     width: item.width || 3000,
                     height: item.height || 400,
                     fontSize: item.fontSize || "16px",
-                    top: item.x || 300,
-                    left: item.y || 600,
+                    top: item.y,
+                    left: item.x,
                     color: item.color || "#000000",
                     // backgroundColor: item.backgroundColor || "transparent",
                     opacity: item.opacity! / 100,
@@ -184,8 +184,8 @@ export const SequenceItem: Record<
                     className={`designcombo-scene-item id-${item.id} designcombo-scene-item-type-${item.type}`}
                     style={{
                         pointerEvents: "auto",
-                        top: item?.x || 0,
-                        left: item?.y || 0,
+                        top: item.y,
+                        left: item.x,
                         width: crop.width || "100%",
                         height: crop.height || "auto",
                         // transform: item?.transform || "none",

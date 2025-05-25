@@ -49,9 +49,16 @@ Prioritized tasks contributions are welcomed!
 	- [x] split with s
 	- [x] duplicate with d
 	- [x] delete with del
-	- [ ] ctrl + z
+	- [ ] ctrl + z (to undo)
+- [ ] default project to test the project without having to upload media
+- [ ] some sample clips for people to play with.
+- [ ] add screen shot or gif in the landing page to show it off
 - [ ] handle left resize in timeline elements
 - [ ] add crop, positioning to elements with react-moveable
+- [ ] drag the marker play head
+- [x] make most of the text on the page be select-none **(ui)**
+- [ ] Functionality to export and import the project in a specific format
+- [ ] containerize the project with docker, so it can be self-hosted easily.
 - [ ] functionality to separate audio from vids
 - [ ] add playback speed for vids and audio
 - [ ] add close option to each sidebars **(ui)**

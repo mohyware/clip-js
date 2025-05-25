@@ -13,7 +13,7 @@ export default function Header() {
         <header className="bg-black border-b border-gray-800 shadow-sm">
             <div className="container mx-auto px-4 py-4 flex justify-between items-center">
                 <div className="flex items-center">
-                    <span className="text-3xl dark:text-gray-100">ClipJS</span>
+                    <Link href="/" className="text-3xl dark:text-gray-100">ClipJS</Link>
                 </div>
                 <nav className="flex items-center">
                     <ul className="flex space-x-2 mr-2">

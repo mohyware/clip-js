@@ -2,7 +2,7 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { useEffect, useRef, useState } from "react";
 import { getFile, useAppSelector } from "@/app/store";
-import { Coffee } from "lucide-react";
+import { Heart } from "lucide-react";
 import Image from "next/image";
 import { extractConfigs } from "@/app/utils/extractConfigs";
 import { mimeToExt } from "@/app/types";
@@ -150,7 +150,7 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
                         const { label, start, end, x, y } = overlays[i];
                         const nextLabel = i === overlays.length - 1 ? 'outv' : `tmp${i}`;
                         filters.push(
-                            `[${lastLabel}][${label}]overlay=${y}:${x}:enable='between(t\\,${start}\\,${end})'[${nextLabel}]`
+                            `[${lastLabel}][${label}]overlay=${x}:${y}:enable='between(t\\,${start}\\,${end})'[${nextLabel}]`
                         );
                         lastLabel = nextLabel;
                     }
@@ -174,7 +174,7 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
                         const alpha = Math.min(Math.max((text.opacity ?? 100) / 100, 0), 1);
                         const color = text.color?.includes('@') ? text.color : `${text.color || 'white'}@${alpha}`;
                         filters.push(
-                            `[${lastLabel}]drawtext=fontfile=font${text.font}.ttf:text='${escapedText}':x=${text.y}:y=${text.x}:fontsize=${text.fontSize || 24}:fontcolor=${color}:enable='between(t\\,${text.positionStart}\\,${text.positionEnd})'[${label}]`
+                            `[${lastLabel}]drawtext=fontfile=font${text.font}.ttf:text='${escapedText}':x=${text.x}:y=${text.y}:fontsize=${text.fontSize || 24}:fontcolor=${color}:enable='between(t\\,${text.positionStart}\\,${text.positionEnd})'[${label}]`
                         );
                         lastLabel = label;
                     }
@@ -302,13 +302,13 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
                                         <span className="ml-2">Save Video</span>
                                     </a>
                                     <a
-                                        href="https://buymeacoffee.com/mohyware"
+                                        href="https://github.com/sponsors/mohyware"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`inline-flex items-center p-3 bg-yellow-600 hover:bg-yellow-500 rounded-lg text-gray-900 font-bold transition-all transform`}
+                                        className={`inline-flex items-center p-3 bg-pink-600 hover:bg-pink-500 rounded-lg text-gray-900 font-bold transition-all transform`}
                                     >
-                                        <Coffee size={20} className="mr-2" />
-                                        Buy Me a Coffee
+                                        <Heart size={20} className="mr-2" />
+                                        Sponsor on Github
                                     </a>
                                 </div>
                             </div>

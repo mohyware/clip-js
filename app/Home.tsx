@@ -9,7 +9,7 @@ export default function Home() {
       {/* <Header /> */}
       <div className="mx-auto bg-surfacePrimary max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center lg:pt-32">
         <p className="mx-auto -mt-4 max-w-2xl text-lg tracking-tight text-gray-200 sm:mt-6">Welcome to
-          <span className="border-b border-dotted border-slate-300 ml-2 text-white">ClipJS</span>
+          {/* <span className="border-b border-dotted border-slate-300 ml-2 text-white">ClipJS</span> */}
         </p>
 
         <h1 className="mx-auto max-w-4xl font-display text-5xl font-medium tracking-tight text-white sm:text-7xl">

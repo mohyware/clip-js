@@ -16,6 +16,12 @@ const config: Config = {
       colors: {
         surfacePrimary: "oklch(.141 .005 285.823)",
         darkSurfacePrimary: "oklch(.141 .005 285.823)",
+        'text-primary': '#ffffff',
+        'dark-text-primary': '#ffffff',
+        'text-secondary': '#e2e2e2',
+        'dark-text-secondary': '#e2e2e2',
+        'surface-secondary': '#2a2a2a',
+        'dark-surface-secondary': '#2a2a2a',
       },
       border: {
         DEFAULT: "rgba(128, 128, 128, 0.5)",

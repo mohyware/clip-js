@@ -2,6 +2,15 @@
 import Link from "next/link";
 import ThemeSwitch from "../buttons/ThemeSwitch";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { 
+  NavigationMenu, 
+  NavigationMenuList, 
+  NavigationMenuItem, 
+  NavigationMenuLink,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+
 export default function Header() {
   const pathname = usePathname();
 
@@ -13,38 +22,38 @@ export default function Header() {
     <header className="bg-black border-b border-gray-800 shadow-sm">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center">
-          <Link href="/" className="text-3xl dark:text-gray-100">
+          <Link href="/" className="text-3xl dark:text-gray-100 font-bold">
             timeline
           </Link>
         </div>
-        <nav className="flex items-center">
-          <ul className="flex space-x-2 mr-2">
-            <li>
-              <Link
-                href="/"
-                className="text-md text-white hover:text-gray-800 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
-              >
-                Home
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/projects"
-                className="text-md text-white hover:text-gray-800 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
-              >
-                Projects
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/about"
-                className="text-md text-white hover:text-gray-800 px-4 py-2 rounded-md hover:bg-gray-100 transition-colors"
-              >
-                About Me
-              </Link>
-            </li>
-          </ul>
-          {/* <ThemeSwitch /> */}
+        
+        <nav className="flex items-center space-x-4">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link href="/" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Home
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/projects" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    Projects
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Link href="/about" legacyBehavior passHref>
+                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                    About Me
+                  </NavigationMenuLink>
+                </Link>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          <ThemeSwitch />
         </nav>
       </div>
     </header>

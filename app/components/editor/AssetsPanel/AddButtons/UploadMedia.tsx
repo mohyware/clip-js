@@ -6,6 +6,7 @@ import { storeFile } from "../../../../store";
 import { categorizeFile } from "../../../../utils/utils";
 import Image from 'next/image';
 import { Upload } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function AddMedia() {
     const { mediaFiles, filesID } = useAppSelector((state) => state.projectState);
@@ -24,15 +25,20 @@ export default function AddMedia() {
     };
 
     return (
-        <div
-        >
-            <label
-                htmlFor="file-upload"
-                className="cursor-pointer rounded-full bg-white border border-solid border-transparent transition-colors flex flex-row gap-2 items-center justify-center text-gray-800 hover:bg-[#ccc] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-auto py-2 px-2 sm:px-5 sm:w-auto"
+        <div>
+            <Button
+                variant="secondary"
+                className="rounded-full bg-white text-gray-800 hover:bg-gray-100 h-auto py-2 px-2 sm:px-5"
+                asChild
             >
-                <Upload className="text-black" size={12} />
-                <span className="text-xs">Add Media</span>
-            </label>
+                <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer flex flex-row gap-2 items-center justify-center"
+                >
+                    <Upload className="text-black" size={12} />
+                    <span className="text-xs">Add Media</span>
+                </label>
+            </Button>
             <input
                 type="file"
                 accept="video/*,audio/*,image/*"

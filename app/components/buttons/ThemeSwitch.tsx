@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { AiOutlineSun, AiOutlineMoon } from "react-icons/ai";
+import { Button } from "@/components/ui/button";
 
 const ThemeSwitch = () => {
   const [mounted, setMounted] = useState(false);
@@ -16,13 +17,14 @@ const ThemeSwitch = () => {
   }
 
   return (
-    <button
-      onClick={() => setTheme("dark")}
-      className="p-2 text-gray-800 dark:text-gray-200 bg-transparent dark:bg-black"
+    <Button
+      variant="ghost"
+      size="icon"
+      onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
       aria-label="Toggle Dark Mode"
     >
       {resolvedTheme === "dark" ? <AiOutlineSun size={20} /> : <AiOutlineMoon size={20} />}
-    </button>
+    </Button>
   );
 };
 

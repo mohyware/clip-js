@@ -3,12 +3,20 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
-import { Plus, Video } from 'lucide-react';
+import { Plus, Video, Trash2 } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { addProject, deleteProject, rehydrateProjects, setCurrentProject } from '../../store/slices/projectsSlice';
 import { listProjects, storeProject, deleteProject as deleteProjectFromDB } from '../../store';
 import { ProjectState } from '../../types';
 import { toast } from 'react-hot-toast';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
+
 export default function Projects() {
     const dispatch = useAppDispatch();
     const { projects, currentProjectId } = useAppSelector((state) => state.projects);
@@ -91,6 +99,17 @@ export default function Projects() {
         toast.success('Project deleted successfully');
     };
 
+    const LoadingSkeleton = () => (
+        <div className="fixed inset-0 flex items-center bg-black bg-opacity-50 justify-center z-50">
+            <Card className="bg-black bg-opacity-70 border-gray-800">
+                <CardContent className="pt-6 flex flex-col items-center">
+                    <div className="w-16 h-16 border-4 border-t-white border-r-white border-opacity-30 border-t-opacity-100 rounded-full animate-spin"></div>
+                    <p className="mt-4 text-white text-lg">Loading projects...</p>
+                </CardContent>
+            </Card>
+        </div>
+    );
+
     return (
         <div>
             <div>
@@ -100,42 +119,38 @@ export default function Projects() {
                     <span className="inline-block">Projects</span>
                 </h2>
                 {isLoading ? (
-                    <div className="fixed inset-0 flex items-center bg-black bg-opacity-50 justify-center z-50">
-                        <div className="bg-black bg-opacity-70 p-6 rounded-lg flex flex-col items-center">
-                            <div className="w-16 h-16 border-4 border-t-white border-r-white border-opacity-30 border-t-opacity-100 rounded-full animate-spin"></div>
-                            <p className="mt-4 text-white text-lg">Loading projects...</p>
-                        </div>
-                    </div>
+                    <LoadingSkeleton />
                 ) : (
                     <div className="flex justify-center items-center py-12">
                         <div className="grid py-4 w-2/3 sm:w-1/2 md:w-1/3 lg:w-1/4 grid-cols-1 gap-4 lg:grid-cols-1 lg:gap-5">
                             {/* Add Project Button */}
-                            <button onClick={() => setIsCreating(true)} className="group">
-                                <div
-                                    className="flex flex-col gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-4 transition-transform transform group-hover:scale-105 group-hover:border-opacity-10 group-hover:shadow-lg [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
-                                >
-                                    <figure className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
+                            <Card 
+                                className="cursor-pointer border border-white border-opacity-10 bg-transparent hover:scale-105 transition-transform [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
+                                onClick={() => setIsCreating(true)}
+                            >
+                                <CardContent className="pt-6">
+                                    <div className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
                                         <div className="flex items-center space-x-4">
                                             <div className="flex size-9 items-center justify-center rounded-full bg-surface-secondary">
                                                 <Plus className="invert" size={18} />
                                             </div>
                                             <h5 className="text-lg font-medium">Add Project</h5>
                                         </div>
-                                    </figure>
-                                </div>
-                            </button>
+                                    </div>
+                                </CardContent>
+                            </Card>
 
                             {/* List Projects */}
                             {[...projects]
                                 .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
                                 .map(({ id, projectName, createdAt, lastModified }) => (
-                                    <div key={id} className="">
-                                        <Link href={`/projects/${id}`} onClick={() => dispatch(setCurrentProject(id))} className="group block h-full">
-                                            <div
-                                                className="flex flex-col gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-4 transition-transform transform group-hover:scale-105 group-hover:border-opacity-10 group-hover:shadow-lg [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
-                                            >
-                                                <figure className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
-                                                    {/*  Project Name */}
+                                    <Card 
+                                        key={id} 
+                                        className="cursor-pointer border border-white border-opacity-10 bg-transparent hover:scale-105 transition-transform [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
+                                    >
+                                        <CardContent className="pt-6">
+                                            <Link href={`/projects/${id}`} onClick={() => dispatch(setCurrentProject(id))} className="block h-full">
+                                                <div className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary mb-4">
                                                     <div className="flex items-center space-x-3 flex-1 min-w-0">
                                                         <div className="flex-shrink-0 flex size-9 items-center justify-center rounded-full bg-surface-secondary">
                                                             <Video className="invert" size={18} />
@@ -144,32 +159,33 @@ export default function Projects() {
                                                             {projectName}
                                                         </h5>
                                                     </div>
-                                                    {/* Delete Button */}
-                                                    <button
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             e.preventDefault();
                                                             handleDeleteProject(id);
                                                         }}
-                                                        className="flex-shrink-0 ml-2 text-red-500 hover:text-red-600 transition-colors"
+                                                        className="flex-shrink-0 ml-2 text-red-500 hover:text-red-600 hover:bg-red-50 h-8 w-8"
                                                         aria-label="Delete project"
                                                     >
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
-                                                            <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                                                        </svg>
-                                                    </button>
-                                                </figure>
+                                                        <Trash2 size={16} />
+                                                    </Button>
+                                                </div>
                                                 <div className="flex flex-col items-start py-1 gap-1 text-sm">
                                                     <p className="text-pretty text-text-secondary dark:text-dark-text-secondary">
-                                                        <span className="font-medium">Created:</span> {new Date(createdAt).toLocaleDateString()}
+                                                        <Badge variant="outline" className="mr-2">Created</Badge>
+                                                        {new Date(createdAt).toLocaleDateString()}
                                                     </p>
                                                     <p className="text-pretty text-text-secondary dark:text-dark-text-secondary">
-                                                        <span className="font-medium">Last Modified:</span> {new Date(lastModified).toLocaleDateString()}
+                                                        <Badge variant="outline" className="mr-2">Modified</Badge>
+                                                        {new Date(lastModified).toLocaleDateString()}
                                                     </p>
                                                 </div>
-                                            </div>
-                                        </Link>
-                                    </div>
+                                            </Link>
+                                        </CardContent>
+                                    </Card>
                                 ))}
                         </div>
                     </div>
@@ -177,13 +193,21 @@ export default function Projects() {
             </div>
 
             {/* Add Project Modal */}
-            <div className="container mx-auto px-4 py-8">
-                {isCreating && (
-                    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                        <div className="bg-black border border-white border-opacity-10 p-6 rounded-lg w-96">
-                            <h3 className="text-xl font-bold mb-4 text-white">Create New Project</h3>
-                            <input
-                                type="text"
+            <Dialog open={isCreating} onOpenChange={setIsCreating}>
+                <DialogContent className="bg-black border border-white border-opacity-10">
+                    <DialogHeader>
+                        <DialogTitle className="text-white">Create New Project</DialogTitle>
+                        <DialogDescription className="text-gray-400">
+                            Enter a name for your new video project.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="project-name" className="text-right text-white">
+                                Name
+                            </Label>
+                            <Input
+                                id="project-name"
                                 ref={inputRef}
                                 value={newProjectName}
                                 onChange={(e) => setNewProjectName(e.target.value)}
@@ -195,27 +219,27 @@ export default function Projects() {
                                     }
                                 }}
                                 placeholder="Project Name"
-                                className="w-full p-2 mb-4 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                                className="col-span-3 bg-darkSurfacePrimary border-white border-opacity-10 text-white focus:border-white"
                             />
-                            <div className="flex justify-end gap-2">
-                                <button
-                                    onClick={() => setIsCreating(false)}
-                                    className="px-4 py-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md hover:bg-[#383838] text-white rounded "
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    onClick={handleCreateProject}
-                                    className="px-4 py-2 bg-white text-black hover:bg-[#ccc] rounded"
-                                >
-                                    Create
-                                </button>
-                            </div>
                         </div>
                     </div>
-                )}
-            </div>
+                    <DialogFooter>
+                        <Button 
+                            variant="outline" 
+                            onClick={() => setIsCreating(false)}
+                            className="bg-darkSurfacePrimary border-white border-opacity-10 text-white hover:bg-gray-800"
+                        >
+                            Cancel
+                        </Button>
+                        <Button 
+                            onClick={handleCreateProject}
+                            className="bg-white text-black hover:bg-gray-100"
+                        >
+                            Create
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
-
     );
 }

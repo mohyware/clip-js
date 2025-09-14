@@ -89,3 +89,29 @@
     @apply bg-background text-foreground;
     }
 }
+
+@layer components {
+  /* Custom components for better integration */
+  .timeline-button {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background;
+  }
+  
+  .editor-panel {
+    @apply bg-card text-card-foreground rounded-lg border;
+  }
+  
+  .feature-card {
+    @apply border border-white border-opacity-10 bg-transparent hover:scale-105 transition-transform [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset];
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Ensure proper spacing for converted components */
+  .shadcn-spacing {
+    @apply space-y-4;
+  }
+}

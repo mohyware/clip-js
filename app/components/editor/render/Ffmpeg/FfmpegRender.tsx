@@ -215,7 +215,7 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
 
             // return the output url
             const outputData = await ffmpeg.readFile('output.mp4');
-            
+            // @ts-ignore
             const outputBlob = new Blob([outputData as Uint8Array], { type: 'video/mp4' });
             const outputUrl = URL.createObjectURL(outputBlob);
             return outputUrl;

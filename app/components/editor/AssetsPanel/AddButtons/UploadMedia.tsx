@@ -5,6 +5,7 @@ import { setMediaFiles, setFilesID } from "../../../../store/slices/projectSlice
 import { storeFile } from "../../../../store";
 import { categorizeFile } from "../../../../utils/utils";
 import Image from 'next/image';
+import { Upload } from 'lucide-react';
 
 export default function AddMedia() {
     const { mediaFiles, filesID } = useAppSelector((state) => state.projectState);
@@ -29,13 +30,7 @@ export default function AddMedia() {
                 htmlFor="file-upload"
                 className="cursor-pointer rounded-full bg-white border border-solid border-transparent transition-colors flex flex-row gap-2 items-center justify-center text-gray-800 hover:bg-[#ccc] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-auto py-2 px-2 sm:px-5 sm:w-auto"
             >
-                <Image
-                    alt="Add Project"
-                    className="Black"
-                    height={12}
-                    width={12}
-                    src="https://www.svgrepo.com/show/514275/upload-cloud.svg"
-                />
+                <Upload className="text-black" size={12} />
                 <span className="text-xs">Add Media</span>
             </label>
             <input

@@ -1,6 +1,21 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Ban, ShieldX, UserX, Zap, Scissors, Combine, LucideIcon } from "lucide-react";
 import { featuresGridList } from "./utils/data";
+
+// Helper function to get the icon component
+const getIconComponent = (iconName: string): LucideIcon => {
+  const iconMap: Record<string, LucideIcon> = {
+    Ban,
+    ShieldX,
+    UserX,
+    Zap,
+    Scissors,
+    Combine
+  };
+  
+  return iconMap[iconName] || Ban; // fallback to Ban icon
+};
 
 export default function Home() {
 
@@ -67,28 +82,25 @@ export default function Home() {
         </h2>
 
         <div className="grid w-full max-w-[1680px] mx-auto py-4 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
-          {featuresGridList.items.map(({ id, title, description, icon }) => (
-            <article
-              key={id}
-              className="flex flex-col gap-3 md:gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-3 md:p-4 [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
-            >
-              <figure className="flex size-8 md:size-9 items-center justify-start rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
-                <Image
-                  alt={icon.alt ?? title}
-                  className="invert"
-                  height={18}
-                  src={icon.url}
-                  width={18}
-                />
-              </figure>
-              <div className="flex flex-col items-start gap-1">
-                <h5 className="text-base md:text-lg font-medium">{title}</h5>
-                <p className="text-pretty text-sm md:text-base text-text-secondary dark:text-dark-text-secondary">
-                  {description}
-                </p>
-              </div>
-            </article>
-          ))}
+          {featuresGridList.items.map(({ id, title, description, icon }) => {
+            const IconComponent = getIconComponent(icon.name);
+            return (
+              <article
+                key={id}
+                className="flex flex-col gap-3 md:gap-4 rounded-lg border border-white border-opacity-10 shadow-md p-3 md:p-4 [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
+              >
+                <figure className="flex size-8 md:size-9 items-center justify-start rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
+                  <IconComponent className="invert" size={18} />
+                </figure>
+                <div className="flex flex-col items-start gap-1">
+                  <h5 className="text-base md:text-lg font-medium">{title}</h5>
+                  <p className="text-pretty text-sm md:text-base text-text-secondary dark:text-dark-text-secondary">
+                    {description}
+                  </p>
+                </div>
+              </article>
+            );
+          })}
         </div>
         <br />
         <br />

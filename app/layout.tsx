@@ -1,11 +1,11 @@
-import './globals.css'
-import type { Metadata } from 'next'
+import "./globals.css";
+import type { Metadata } from "next";
 import { Inter, Roboto_Mono } from "next/font/google";
-import { Providers } from './providers'
+import { Providers } from "./providers";
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
-import { Toaster } from 'react-hot-toast';
-import { Analytics } from "@vercel/analytics/next"
+import { Toaster } from "react-hot-toast";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Inter({
   variable: "--font-geist-sans",
@@ -18,14 +18,15 @@ const geistMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'ClipJS',
-  description: 'A free online video editor that enables you to edit videos directly from your web browser.',
-}
+  title: "timeline",
+  description:
+    "A free online video editor that enables you to edit videos directly from your web browser.",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
@@ -38,9 +39,9 @@ export default function RootLayout({
             <Toaster
               toastOptions={{
                 style: {
-                  borderRadius: '10px',
-                  background: '#333',
-                  color: '#fff',
+                  borderRadius: "10px",
+                  background: "#333",
+                  color: "#fff",
                 },
               }}
             />
@@ -51,5 +52,5 @@ export default function RootLayout({
         </Providers>
       </body>
     </html>
-  )
+  );
 }

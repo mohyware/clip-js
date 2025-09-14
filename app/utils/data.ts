@@ -5,7 +5,7 @@ export const featuresGridList = {
             title: "No Watermarks",
             description: "Edit your videos without any watermarks.",
             icon: {
-                url: "https://www.svgrepo.com/show/343214/no-sign.svg",
+                name: "Ban",
                 alt: "No Watermarks",
             },
         },
@@ -14,7 +14,7 @@ export const featuresGridList = {
             title: "No Ads",
             description: "Edit and render without having to watch any ads.",
             icon: {
-                url: "https://www.svgrepo.com/show/508210/ad.svg",
+                name: "ShieldX",
                 alt: "No Ads",
             },
         },
@@ -23,7 +23,7 @@ export const featuresGridList = {
             title: "No Registration",
             description: "Start using the app instantly no sign-up, no account, just get to work.",
             icon: {
-                url: "https://www.svgrepo.com/show/318470/login.svg",
+                name: "UserX",
                 alt: "No Registration",
             },
         },
@@ -32,7 +32,7 @@ export const featuresGridList = {
             title: "Speed",
             description: "Everything runs in your browser so there's no need to upload files to third-party services or wait around.",
             icon: {
-                url: "https://www.svgrepo.com/show/441028/speed.svg",
+                name: "Zap",
                 alt: "Speed",
             },
         },
@@ -41,7 +41,7 @@ export const featuresGridList = {
             title: "Trim Videos",
             description: "Trim video to remove unwanted parts, reduce videos to their most important sections.",
             icon: {
-                url: "https://www.svgrepo.com/show/348321/cut.svg",
+                name: "Scissors",
                 alt: "Trim Videos",
             },
         },
@@ -50,7 +50,7 @@ export const featuresGridList = {
             title: "Combine",
             description: "Combine multiple videos, images, texts and audio into one.",
             icon: {
-                url: "https://www.svgrepo.com/show/413830/combine.svg",
+                name: "Combine",
                 alt: "Combine",
             },
         },

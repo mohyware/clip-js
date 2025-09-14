@@ -21,10 +21,13 @@ Clone the repo, install dependencies:
 ```bash
 npm install
 ```
+
 Then run the development server:
+
 ```bash
 npm run dev
 ```
+
 Or build and start in production mode:
 
 ```bash
@@ -36,15 +39,16 @@ Alternatively, use Docker:
 
 ```bash
 # Build the Docker image
-docker build -t clipjs .
+docker build -t timeline .
 
 # Run the container
-docker run -p 3000:3000 clipjs
+docker run -p 3000:3000 timeline
 ```
+
 Then navigate to [http://localhost:3000](http://localhost:3000)
 
 ## TODOs
 
-Prioritized tasks are listed in [TODO.md](./TODO.md). 
+Prioritized tasks are listed in [TODO.md](./TODO.md).
 
 contributions are welcomed!

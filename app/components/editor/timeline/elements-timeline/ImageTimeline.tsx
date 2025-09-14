@@ -5,6 +5,7 @@ import { setActiveElement, setActiveElementIndex, setMediaFiles } from "@/app/st
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
+import { ImageIcon } from "lucide-react";
 import Header from "../Header";
 import { MediaFile } from "@/app/types";
 import { debounce, throttle } from "lodash";
@@ -109,13 +110,7 @@ export default function ImageTimeline() {
                             }}
                         >
                             {/* <MoveableTimeline /> */}
-                            <Image
-                                alt="Image"
-                                className="h-7 w-7 min-w-6 mr-2 flex-shrink-0"
-                                height={30}
-                                width={30}
-                                src="https://www.svgrepo.com/show/535454/image.svg"
-                            />
+                            <ImageIcon className="h-7 w-7 min-w-6 mr-2 flex-shrink-0" />
                             <span className="truncate text-x">{clip.fileName}</span>
 
                         </div>

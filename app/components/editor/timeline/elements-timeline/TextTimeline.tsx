@@ -5,6 +5,7 @@ import { setActiveElement, setActiveElementIndex, setTextElements } from "@/app/
 import { memo, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
+import { Type } from "lucide-react";
 import Header from "../Header";
 import { MediaFile, TextElement } from "@/app/types";
 import { debounce, throttle } from "lodash";
@@ -105,13 +106,7 @@ export default function TextTimeline() {
                         }}
                     >
                         {/* <MoveableTimeline /> */}
-                        <Image
-                            alt="Text"
-                            className="h-7 w-7 min-w-6 mr-2 flex-shrink-0"
-                            height={30}
-                            width={30}
-                            src="https://www.svgrepo.com/show/535686/text.svg"
-                        />
+                        <Type className="h-7 w-7 min-w-6 mr-2 flex-shrink-0" />
                         <span className="truncate text-x">{clip.text}</span>
 
                     </div>

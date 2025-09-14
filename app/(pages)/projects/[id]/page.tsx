@@ -21,6 +21,7 @@ import { PreviewPlayer } from "../../../components/editor/player/remotion/Player
 import { MediaFile } from "@/app/types";
 import ExportList from "../../../components/editor/AssetsPanel/tools-section/ExportList";
 import Image from "next/image";
+import { Video, Music, ImageIcon, Type } from 'lucide-react';
 import ProjectName from "../../../components/editor/player/ProjectName";
 export default function Project({ params }: { params: { id: string } }) {
     const { id } = params;
@@ -161,49 +162,25 @@ export default function Project({ params }: { params: { id: string } }) {
 
                     <div className="relative h-16">
                         <div className="flex items-center gap-2 p-4">
-                            <Image
-                                alt="Video"
-                                className="invert h-auto w-auto max-w-[30px] max-h-[30px]"
-                                height={30}
-                                width={30}
-                                src="https://www.svgrepo.com/show/532727/video.svg"
-                            />
+                            <Video className="invert h-auto w-auto max-w-[30px] max-h-[30px]" size={30} />
                         </div>
                     </div>
 
                     <div className="relative h-16">
                         <div className="flex items-center gap-2 p-4">
-                            <Image
-                                alt="Video"
-                                className="invert h-auto w-auto max-w-[30px] max-h-[30px]"
-                                height={30}
-                                width={30}
-                                src="https://www.svgrepo.com/show/532708/music.svg"
-                            />
+                            <Music className="invert h-auto w-auto max-w-[30px] max-h-[30px]" size={30} />
                         </div>
                     </div>
 
                     <div className="relative h-16">
                         <div className="flex items-center gap-2 p-4">
-                            <Image
-                                alt="Video"
-                                className="invert h-auto w-auto max-w-[30px] max-h-[30px]"
-                                height={30}
-                                width={30}
-                                src="https://www.svgrepo.com/show/535454/image.svg"
-                            />
+                            <ImageIcon className="invert h-auto w-auto max-w-[30px] max-h-[30px]" size={30} />
                         </div>
                     </div>
 
                     <div className="relative h-16">
                         <div className="flex items-center gap-2 p-4">
-                            <Image
-                                alt="Video"
-                                className="invert h-auto w-auto max-w-[30px] max-h-[30px]"
-                                height={30}
-                                width={30}
-                                src="https://www.svgrepo.com/show/535686/text.svg"
-                            />
+                            <Type className="invert h-auto w-auto max-w-[30px] max-h-[30px]" size={30} />
                         </div>
                     </div>
                 </div>

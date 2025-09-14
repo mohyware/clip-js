@@ -2,7 +2,7 @@
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { useEffect, useRef, useState } from "react";
 import { getFile, useAppSelector } from "@/app/store";
-import { Heart } from "lucide-react";
+import { Heart, Save } from "lucide-react";
 import Image from "next/image";
 import { extractConfigs } from "@/app/utils/extractConfigs";
 import { mimeToExt } from "@/app/types";
@@ -215,6 +215,7 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
 
             // return the output url
             const outputData = await ffmpeg.readFile('output.mp4');
+            
             const outputBlob = new Blob([outputData as Uint8Array], { type: 'video/mp4' });
             const outputUrl = URL.createObjectURL(outputBlob);
             return outputUrl;
@@ -292,13 +293,7 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
                                         download={`${projectName}.mp4`}
                                         className={`inline-flex items-center p-3 bg-white hover:bg-[#ccc] rounded-lg text-gray-900 font-bold transition-all transform `}
                                     >
-                                        <Image
-                                            alt='Download'
-                                            className="Black"
-                                            height={18}
-                                            src={'https://www.svgrepo.com/show/501347/save.svg'}
-                                            width={18}
-                                        />
+                                        <Save className="text-black" size={18} />
                                         <span className="ml-2">Save Video</span>
                                     </a>
                                     <a

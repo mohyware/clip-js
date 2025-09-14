@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
+import { Plus, Video } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { addProject, deleteProject, rehydrateProjects, setCurrentProject } from '../../store/slices/projectsSlice';
 import { listProjects, storeProject, deleteProject as deleteProjectFromDB } from '../../store';
@@ -116,13 +117,7 @@ export default function Projects() {
                                     <figure className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
                                         <div className="flex items-center space-x-4">
                                             <div className="flex size-9 items-center justify-center rounded-full bg-surface-secondary">
-                                                <Image
-                                                    alt="Add Project"
-                                                    className="invert"
-                                                    height={18}
-                                                    src="https://www.svgrepo.com/show/421119/add-create-new.svg"
-                                                    width={18}
-                                                />
+                                                <Plus className="invert" size={18} />
                                             </div>
                                             <h5 className="text-lg font-medium">Add Project</h5>
                                         </div>
@@ -143,13 +138,7 @@ export default function Projects() {
                                                     {/*  Project Name */}
                                                     <div className="flex items-center space-x-3 flex-1 min-w-0">
                                                         <div className="flex-shrink-0 flex size-9 items-center justify-center rounded-full bg-surface-secondary">
-                                                            <Image
-                                                                alt={projectName}
-                                                                className="invert"
-                                                                height={18}
-                                                                src="https://www.svgrepo.com/show/522461/video.svg"
-                                                                width={18}
-                                                            />
+                                                            <Video className="invert" size={18} />
                                                         </div>
                                                         <h5 className="truncate font-medium text-base sm:text-lg" title={projectName}>
                                                             {projectName}

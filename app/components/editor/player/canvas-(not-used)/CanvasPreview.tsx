@@ -18,6 +18,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
+import { VolumeX, Volume2, Play, Pause } from 'lucide-react';
 import { MediaFile, TextElement } from '@/app/types';
 import { useAppSelector, useAppDispatch, getProject, storeProject } from '@/app/store';
 import { setCurrentTime, setIsPlaying, setIsMuted, rehydrate } from '@/app/store/slices/projectSlice';
@@ -632,14 +633,14 @@ export default function CanvasPreview() {
                     onClick={toggleMute}
                     className="bg-white hover:bg-gray-200 text-black py-1 px-3 rounded"
                 >
-                    <img src={isMuted ? 'https://www.svgrepo.com/show/391332/sound-mute.svg' : 'https://www.svgrepo.com/show/391335/sound-up.svg'} alt="Mute" width={24} height={24} />
+                    {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
                 </button>
                 {/* <GlobalKeyHandlerProps onSpace={togglePlay} onMute={toggleMute} /> */}
                 <button
                     onClick={togglePlay}
                     className="bg-white hover:bg-gray-200 text-black py-1 px-3 rounded"
                 >
-                    <img src={isPlaying ? 'https://www.svgrepo.com/show/512674/play-1003.svg' : 'https://www.svgrepo.com/show/535553/pause.svg'} alt="Play" width={24} height={24} />
+                    {isPlaying ? <Pause size={24} /> : <Play size={24} />}
                 </button>
             </div>
 

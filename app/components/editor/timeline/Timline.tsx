@@ -3,6 +3,7 @@ import { setMarkerTrack, setTextElements, setMediaFiles, setTimelineZoom, setCur
 import { memo, useCallback, useEffect, useMemo, useRef } from "react";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
+import { Check, X, Scissors, Copy, Trash2 } from "lucide-react";
 import Header from "./Header";
 import VideoTimeline from "./elements-timeline/VideoTimeline";
 import ImageTimeline from "./elements-timeline/ImageTimeline";
@@ -212,18 +213,12 @@ export const Timeline = () => {
                         onClick={() => dispatch(setMarkerTrack(!enableMarkerTracking))}
                         className="bg-white border rounded-md border-transparent transition-colors flex flex-row items-center justify-center text-gray-800 hover:bg-[#ccc] dark:hover:bg-[#ccc] mt-2 font-medium text-sm sm:text-base h-auto px-2 py-1 sm:w-auto"
                     >
-                        {enableMarkerTracking ? <Image
-                            alt="cut"
+                        {enableMarkerTracking ? <Check
                             className="h-auto w-auto max-w-[20px] max-h-[20px]"
-                            height={30}
-                            width={30}
-                            src="https://www.svgrepo.com/show/447546/yes-alt.svg"
-                        /> : <Image
-                            alt="cut"
+                            size={20}
+                        /> : <X
                             className="h-auto w-auto max-w-[20px] max-h-[20px]"
-                            height={30}
-                            width={30}
-                            src="https://www.svgrepo.com/show/447315/dismiss.svg"
+                            size={20}
                         />}
                         <span className="ml-2">Track Marker <span className="text-xs">(T)</span></span>
                     </button>
@@ -232,12 +227,9 @@ export const Timeline = () => {
                         onClick={handleSplit}
                         className="bg-white border rounded-md border-transparent transition-colors flex flex-row items-center justify-center text-gray-800 hover:bg-[#ccc] dark:hover:bg-[#ccc] mt-2 font-medium text-sm sm:text-base h-auto px-2 py-1 sm:w-auto"
                     >
-                        <Image
-                            alt="cut"
+                        <Scissors
                             className="h-auto w-auto max-w-[20px] max-h-[20px]"
-                            height={30}
-                            width={30}
-                            src="https://www.svgrepo.com/show/509075/cut.svg"
+                            size={20}
                         />
                         <span className="ml-2">Split <span className="text-xs">(S)</span></span>
                     </button>
@@ -246,12 +238,9 @@ export const Timeline = () => {
                         onClick={handleDuplicate}
                         className="bg-white border rounded-md border-transparent transition-colors flex flex-row items-center justify-center text-gray-800 hover:bg-[#ccc] dark:hover:bg-[#ccc] mt-2 font-medium text-sm sm:text-base h-auto px-2 py-1 sm:w-auto"
                     >
-                        <Image
-                            alt="cut"
+                        <Copy
                             className="h-auto w-auto max-w-[20px] max-h-[20px]"
-                            height={30}
-                            width={30}
-                            src="https://www.svgrepo.com/show/521623/duplicate.svg"
+                            size={20}
                         />
                         <span className="ml-2">Duplicate <span className="text-xs">(D)</span></span>
                     </button>
@@ -260,12 +249,9 @@ export const Timeline = () => {
                         onClick={handleDelete}
                         className="bg-white border rounded-md border-transparent transition-colors flex flex-row items-center justify-center text-gray-800 hover:bg-[#ccc] dark:hover:bg-[#ccc] mt-2 font-medium text-sm sm:text-base h-auto px-2 py-1 sm:w-auto"
                     >
-                        <Image
-                            alt="Delete"
+                        <Trash2
                             className="h-auto w-auto max-w-[20px] max-h-[20px]"
-                            height={30}
-                            width={30}
-                            src="https://www.svgrepo.com/show/511788/delete-1487.svg"
+                            size={20}
                         />
                         <span className="ml-2">Delete <span className="text-xs">(Del)</span></span>
                     </button>

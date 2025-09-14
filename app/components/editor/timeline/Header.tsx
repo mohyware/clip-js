@@ -41,11 +41,11 @@ export const Header = () => {
                             }}
                         >
                             {/* Tick line */}
-                            <div className={`w-px ${isWholeSecond ? 'h-7 bg-gray-400' : 'h-2 bg-gray-300'}`} />
+                            <div className={`w-px ${isWholeSecond ? 'h-7 bg-border' : 'h-2 bg-muted-foreground'}`} />
 
                             {/* second labels */}
                             {isWholeSecond && (
-                                <span className="mt-1 text-[10px] text-gray-400 cursor-default">
+                                <span className="mt-1 text-[10px] text-muted-foreground cursor-default">
                                     {marker}s
                                 </span>
                             )}

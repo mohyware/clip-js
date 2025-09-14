@@ -28,7 +28,7 @@ export default function AddMedia() {
         <div>
             <Button
                 variant="secondary"
-                className="rounded-full bg-white text-gray-800 hover:bg-gray-100 h-auto py-2 px-2 sm:px-5"
+                className="rounded-full bg-secondary text-secondary-foreground hover:bg-accent h-auto py-2 px-2 sm:px-5"
                 asChild
             >
                 <label

@@ -94,7 +94,7 @@ export default function AudioTimeline() {
             {mediaFiles
                 .filter(clip => clip.type === 'audio')
                 .map((clip) => (
-                    <div key={clip.id} className="bg-green-500">
+                    <div key={clip.id} className="bg-chart-3">
                         <div
                             key={clip.id}
                             ref={(el: HTMLDivElement | null) => {
@@ -103,7 +103,7 @@ export default function AudioTimeline() {
                                 }
                             }}
                             onClick={() => handleClick('media', clip.id)}
-                            className={`absolute border border-gray-500 border-opacity-50 rounded-md top-2 h-12 rounded bg-[#27272A] text-white text-sm flex items-center justify-center cursor-pointer ${activeElement === 'media' && mediaFiles[activeElementIndex].id === clip.id ? 'bg-[#3F3F46] border-blue-500' : ''}`}
+                            className={`absolute border border-border rounded-md top-2 h-12 bg-secondary text-secondary-foreground text-sm flex items-center justify-center cursor-pointer ${activeElement === 'media' && mediaFiles[activeElementIndex].id === clip.id ? 'bg-accent border-primary' : ''}`}
                             style={{
                                 left: `${clip.positionStart * timelineZoom}px`,
                                 width: `${(clip.positionEnd / clip.playbackSpeed - clip.positionStart / clip.playbackSpeed) * timelineZoom}px`,

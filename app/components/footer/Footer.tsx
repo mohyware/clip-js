@@ -1,14 +1,12 @@
 "use client";
-import {
-  AiOutlineFacebook,
-  AiOutlineX,
-  AiOutlineGithub,
-  AiOutlineLinkedin,
-  AiOutlineInstagram,
-} from "react-icons/ai";
-import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { usePathname } from "next/navigation";
+import {
+  AiOutlineGithub,
+  AiOutlineInstagram,
+  AiOutlineLinkedin,
+  AiOutlineX,
+} from "react-icons/ai";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -22,27 +20,27 @@ const Footer = () => {
     {
       href: "https://www.linkedin.com/in/mohyware",
       icon: AiOutlineLinkedin,
-      label: "LinkedIn"
+      label: "LinkedIn",
     },
     {
       href: "https://www.instagram.com/mohyware",
       icon: AiOutlineInstagram,
-      label: "Instagram"
+      label: "Instagram",
     },
     {
       href: "https://x.com/mohyware",
       icon: AiOutlineX,
-      label: "X (formerly Twitter)"
+      label: "X (formerly Twitter)",
     },
     {
       href: "https://github.com/mohyware",
       icon: AiOutlineGithub,
-      label: "GitHub"
-    }
+      label: "GitHub",
+    },
   ];
 
   return (
-    <footer className="bg-black border-t border-gray-800 dark:bg-black shadow-sm text-gray-400 py-6 dark:border-t dark:border-gray-800">
+    <footer className="border-t  shadow-sm  py-6 ">
       <div className="container mx-auto px-4">
         <div className="flex flex-wrap justify-center sm:justify-between items-center text-sm">
           <p className="ml-4">
@@ -55,7 +53,6 @@ const Footer = () => {
                 variant="ghost"
                 size="icon"
                 asChild
-                className="hover:text-gray-300 h-8 w-8"
               >
                 <a
                   href={href}

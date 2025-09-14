@@ -28,7 +28,7 @@ export default function TextProperties() {
                         <textarea
                             value={textElement.text}
                             onChange={(e) => onUpdateText(textElement.id, { text: e.target.value })}
-                            className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
+                            className="w-full p-2  border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
                             rows={3}
                         />
                     </div>

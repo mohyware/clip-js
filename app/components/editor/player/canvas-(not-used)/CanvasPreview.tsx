@@ -625,20 +625,20 @@ export default function CanvasPreview() {
                 width={width}
                 height={height}
                 style={{ width: '100%', height: 'auto' }}
-                className="border border-gray-300 rounded"
+                className="border border-border rounded"
             />
             {/* Video controls */}
             <div className="absolute bottom-16 right-2 flex space-x-2">
                 <button
                     onClick={toggleMute}
-                    className="bg-white hover:bg-gray-200 text-black py-1 px-3 rounded"
+                    className="bg-secondary text-secondary-foreground hover:bg-accent py-1 px-3 rounded"
                 >
                     {isMuted ? <VolumeX size={24} /> : <Volume2 size={24} />}
                 </button>
                 {/* <GlobalKeyHandlerProps onSpace={togglePlay} onMute={toggleMute} /> */}
                 <button
                     onClick={togglePlay}
-                    className="bg-white hover:bg-gray-200 text-black py-1 px-3 rounded"
+                    className="bg-secondary text-secondary-foreground hover:bg-accent py-1 px-3 rounded"
                 >
                     {isPlaying ? <Pause size={24} /> : <Play size={24} />}
                 </button>
@@ -648,15 +648,15 @@ export default function CanvasPreview() {
             <div className="mt-2">
                 <div
                     ref={timelineRef}
-                    className="relative h-3 bg-gray-300 rounded-full cursor-pointer"
+                    className="relative h-3 bg-muted rounded-full cursor-pointer"
                     onClick={handleTimelineClick}
                 >
                     <div
-                        className="absolute h-full inset-y-0 left-[-2px] bg-black rounded-full"
+                        className="absolute h-full inset-y-0 left-[-2px] bg-primary rounded-full"
                         style={{ width: `${(currentTime / duration) * 100 + 1}%` }}
                     />
                 </div>
-                <div className="flex justify-between text-sm text-gray-600 mt-1">
+                <div className="flex justify-between text-sm text-muted-foreground mt-1">
                     <span>{formatTime(currentTime)}</span>
                     <span>{formatTime(duration)}</span>
                 </div>

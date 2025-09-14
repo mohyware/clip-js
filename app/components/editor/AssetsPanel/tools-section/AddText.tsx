@@ -191,7 +191,7 @@ export default function AddTextButton() {
                                 <div className="mt-2 flex justify-end space-x-3">
                                     <button
                                         onClick={handleAddText}
-                                        className="px-4 py-2 bg-white text-black hover:bg-[#ccc] rounded"
+                                        className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded"
                                     >
                                         Add Text
                                     </button>

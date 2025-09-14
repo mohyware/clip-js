@@ -22,9 +22,9 @@ export default function FfmpegProgressBar({ ffmpeg }: Props) {
     }, [ffmpeg]);
 
     return (
-        <div className="w-full bg-[#222] rounded-lg overflow-hidden h-4 border border-gray-700 mt-2">
+        <div className="w-full bg-secondary rounded-lg overflow-hidden h-4 border border-border mt-2">
             <div
-                className="bg-green-500 h-full transition-all duration-200"
+                className="bg-primary h-full transition-all duration-200"
                 style={{ width: `${(progress * 100).toFixed(1)}%` }}
             />
         </div>

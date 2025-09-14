@@ -239,7 +239,7 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
             {/* Render Button */}
             <button
                 onClick={() => render()}
-                className={`inline-flex items-center p-3 bg-white hover:bg-[#ccc] rounded-lg disabled:opacity-50 text-gray-900 font-bold transition-all transform`}
+                className={`inline-flex items-center p-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg disabled:opacity-50 font-bold transition-all transform`}
                 disabled={(!loadFfmpeg || isRendering || (mediaFiles.length === 0 && textElements.length === 0))}
             >
                 {(!loadFfmpeg || isRendering) && <span className="animate-spin mr-2">
@@ -276,9 +276,9 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
 
                         {isRendering ? (
                             <div>
-                                <div className="bg-black p-2 h-40 text-sm font-mono rounded">
+                                <div className="bg-background border border-border p-2 h-40 text-sm font-mono rounded">
                                     <div>{logMessages}</div>
-                                    <p className="text-xs text-gray-400 italic">The progress bar is experimental in FFmpeg WASM, so it might appear slow or unresponsive even though the actual processing is not.</p>
+                                    <p className="text-xs text-muted-foreground italic">The progress bar is experimental in FFmpeg WASM, so it might appear slow or unresponsive even though the actual processing is not.</p>
                                     <FfmpegProgressBar ffmpeg={ffmpeg} />
                                 </div>
                             </div>
@@ -291,16 +291,16 @@ export default function FfmpegRender({ loadFunction, loadFfmpeg, ffmpeg, logMess
                                     <a
                                         href={previewUrl || '#'}
                                         download={`${projectName}.mp4`}
-                                        className={`inline-flex items-center p-3 bg-white hover:bg-[#ccc] rounded-lg text-gray-900 font-bold transition-all transform `}
+                                        className={`inline-flex items-center p-3 bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg font-bold transition-all transform `}
                                     >
-                                        <Save className="text-black" size={18} />
+                                        <Save className="text-primary-foreground" size={18} />
                                         <span className="ml-2">Save Video</span>
                                     </a>
                                     <a
                                         href="https://github.com/sponsors/mohyware"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className={`inline-flex items-center p-3 bg-pink-600 hover:bg-pink-500 rounded-lg text-gray-900 font-bold transition-all transform`}
+                                        className={`inline-flex items-center p-3 bg-chart-5 hover:opacity-90 rounded-lg text-primary-foreground font-bold transition-all transform`}
                                     >
                                         <Heart size={20} className="mr-2" />
                                         Sponsor on Github

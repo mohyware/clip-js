@@ -93,7 +93,7 @@ export default function ImageTimeline() {
             {mediaFiles
                 .filter(clip => clip.type === 'image')
                 .map((clip) => (
-                    <div key={clip.id} className="bg-chart-2">
+                    <div key={clip.id} className="bg-purple-600">
                         <div
                             key={clip.id}
                             ref={(el: HTMLDivElement | null) => {
@@ -102,7 +102,7 @@ export default function ImageTimeline() {
                                 }
                             }}
                             onClick={() => handleClick('media', clip.id)}
-                            className={`absolute border border-border rounded-md top-2 h-12 bg-secondary text-secondary-foreground text-sm flex items-center justify-center cursor-pointer ${activeElement === 'media' && mediaFiles[activeElementIndex].id === clip.id ? 'bg-accent border-primary' : ''}`}
+                            className={`absolute border border-border rounded-md top-2 h-12 bg-purple-600 text-white text-sm flex items-center justify-center cursor-pointer ${activeElement === 'media' && mediaFiles[activeElementIndex].id === clip.id ? 'bg-purple-700 border-purple-400' : ''}`}
                             style={{
                                 left: `${clip.positionStart * timelineZoom}px`,
                                 width: `${(clip.positionEnd - clip.positionStart) * timelineZoom}px`,

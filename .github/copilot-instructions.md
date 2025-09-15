@@ -68,6 +68,7 @@ Complex filter chains in `app/components/editor/render/Ffmpeg/FfmpegRender.tsx`:
 - **Remotion**: `app/components/editor/player/remotion/sequence/` - Preview rendering
 - **State**: `app/store/` - Redux setup with persistence
 - **Design System**: Depend on Shadcn elements and `app/globals.css` - CSS custom properties for theming, don't do over customaization keep it simple and consistent follow shadcn design system and components
+- Don't every use shadcn Card and CardContent components
 
 ### Development Patterns
 

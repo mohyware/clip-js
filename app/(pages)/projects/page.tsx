@@ -1,27 +1,27 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from "next/image";
 import Link from "next/link";
-import { Plus, Video, Trash2 } from 'lucide-react';
+import { Plus, Video, Trash2, Search, MoreHorizontal } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { addProject, deleteProject, rehydrateProjects, setCurrentProject } from '../../store/slices/projectsSlice';
 import { listProjects, storeProject, deleteProject as deleteProjectFromDB } from '../../store';
 import { ProjectState } from '../../types';
 import { toast } from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export default function Projects() {
     const dispatch = useAppDispatch();
     const { projects, currentProjectId } = useAppSelector((state) => state.projects);
     const [isCreating, setIsCreating] = useState(false);
     const [newProjectName, setNewProjectName] = useState('');
+    const [searchQuery, setSearchQuery] = useState('');
     const inputRef = useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -100,111 +100,177 @@ export default function Projects() {
     };
 
     const LoadingSkeleton = () => (
-        <div className="fixed inset-0 flex items-center bg-black bg-opacity-50 justify-center z-50">
-            <Card className="bg-black bg-opacity-70 border-gray-800">
-                <CardContent className="pt-6 flex flex-col items-center">
-                    <div className="w-16 h-16 border-4 border-t-white border-r-white border-opacity-30 border-t-opacity-100 rounded-full animate-spin"></div>
-                    <p className="mt-4 text-white text-lg">Loading projects...</p>
-                </CardContent>
-            </Card>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="p-6 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-lg">
+                    <div className="space-y-3">
+                        <Skeleton className="h-5 w-3/4" />
+                        <Skeleton className="h-4 w-1/2" />
+                    </div>
+                </div>
+            ))}
         </div>
     );
 
+    // Filter projects based on search query
+    const filteredProjects = projects.filter(project => 
+        project.projectName.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric',
+            year: 'numeric'
+        });
+    };
+
+    const getTimeAgo = (dateString: string) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffInMs = now.getTime() - date.getTime();
+        const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+        
+        if (diffInDays === 0) return 'Today';
+        if (diffInDays === 1) return 'Yesterday';
+        if (diffInDays < 7) return `${diffInDays} days ago`;
+        if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} weeks ago`;
+        return formatDate(dateString);
+    };
+
     return (
-        <div>
-            <div>
-                <br />
-                <br />
-                <h2 className="mx-auto max-w-4xl text-center font-display text-5xl font-medium tracking-tight text-white-900 sm:text-4xl">
-                    <span className="inline-block">Projects</span>
-                </h2>
+        <div className="min-h-screen bg-white dark:bg-black">
+            {/* Header Section */}
+            <div className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-black/80 backdrop-blur-sm sticky top-0 z-10">
+                <div className="max-w-7xl mx-auto px-6 py-6">
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">Projects</h1>
+                            <p className="text-gray-500 dark:text-gray-400 mt-1">
+                                {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
+                            </p>
+                        </div>
+                        <Button 
+                            onClick={() => setIsCreating(true)}
+                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 font-medium"
+                        >
+                            <Plus className="w-4 h-4 mr-2" />
+                            New Project
+                        </Button>
+                    </div>
+                    
+                    {/* Search Bar */}
+                    <div className="mt-6 max-w-md">
+                        <div className="relative">
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                            <Input
+                                placeholder="Search projects..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="pl-10 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 focus:border-gray-400 dark:focus:border-gray-600"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div className="max-w-7xl mx-auto px-6 py-8">
                 {isLoading ? (
                     <LoadingSkeleton />
-                ) : (
-                    <div className="flex justify-center items-center py-12">
-                        <div className="grid py-4 w-2/3 sm:w-1/2 md:w-1/3 lg:w-1/4 grid-cols-1 gap-4 lg:grid-cols-1 lg:gap-5">
-                            {/* Add Project Button */}
-                            <Card 
-                                className="cursor-pointer border border-white border-opacity-10 bg-transparent hover:scale-105 transition-transform [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
-                                onClick={() => setIsCreating(true)}
-                            >
-                                <CardContent className="pt-6">
-                                    <div className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary">
-                                        <div className="flex items-center space-x-4">
-                                            <div className="flex size-9 items-center justify-center rounded-full bg-surface-secondary">
-                                                <Plus className="" size={18} />
-                                            </div>
-                                            <h5 className="text-lg font-medium">Add Project</h5>
-                                        </div>
-                                    </div>
-                                </CardContent>
-                            </Card>
-
-                            {/* List Projects */}
-                            {[...projects]
-                                .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-                                .map(({ id, projectName, createdAt, lastModified }) => (
-                                    <Card 
-                                        key={id} 
-                                        className="cursor-pointer border border-white border-opacity-10 bg-transparent hover:scale-105 transition-transform [box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset] dark:[box-shadow:_70px_-20px_130px_0px_rgba(255,255,255,0.05)_inset]"
-                                    >
-                                        <CardContent className="pt-6">
-                                            <Link href={`/projects/${id}`} onClick={() => dispatch(setCurrentProject(id))} className="block h-full">
-                                                <div className="flex items-center justify-between w-full rounded-full bg-surface-secondary p-2 dark:border-dark-border dark:bg-dark-surface-secondary mb-4">
-                                                    <div className="flex items-center space-x-3 flex-1 min-w-0">
-                                                        <div className="flex-shrink-0 flex size-9 items-center justify-center rounded-full bg-surface-secondary">
-                                                            <Video className="" size={18} />
-                                                        </div>
-                                                        <h5 className="truncate font-medium text-base sm:text-lg" title={projectName}>
-                                                            {projectName}
-                                                        </h5>
-                                                    </div>
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="icon"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            e.preventDefault();
-                                                            handleDeleteProject(id);
-                                                        }}
-                                                        className="flex-shrink-0 ml-2 text-red-500 hover:text-red-600 hover:bg-red-50 h-8 w-8"
-                                                        aria-label="Delete project"
-                                                    >
-                                                        <Trash2 size={16} />
-                                                    </Button>
-                                                </div>
-                                                <div className="flex flex-col items-start py-1 gap-1 text-sm">
-                                                    <p className="text-pretty text-text-secondary dark:text-dark-text-secondary">
-                                                        <Badge variant="outline" className="mr-2">Created</Badge>
-                                                        {new Date(createdAt).toLocaleDateString()}
-                                                    </p>
-                                                    <p className="text-pretty text-text-secondary dark:text-dark-text-secondary">
-                                                        <Badge variant="outline" className="mr-2">Modified</Badge>
-                                                        {new Date(lastModified).toLocaleDateString()}
-                                                    </p>
-                                                </div>
-                                            </Link>
-                                        </CardContent>
-                                    </Card>
-                                ))}
+                ) : filteredProjects.length === 0 && searchQuery ? (
+                    <div className="text-center py-12">
+                        <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center mb-4">
+                            <Search className="w-8 h-8 text-gray-400" />
                         </div>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No projects found</h3>
+                        <p className="text-gray-500 dark:text-gray-400">Try adjusting your search to find what you're looking for.</p>
+                    </div>
+                ) : filteredProjects.length === 0 ? (
+                    <div className="text-center py-12">
+                        <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center mb-4">
+                            <Video className="w-8 h-8 text-gray-400" />
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No projects yet</h3>
+                        <p className="text-gray-500 dark:text-gray-400 mb-6">Get started by creating your first video project.</p>
+                        <Button 
+                            onClick={() => setIsCreating(true)}
+                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
+                        >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create Project
+                        </Button>
+                    </div>
+                ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {[...filteredProjects]
+                            .sort((a, b) => new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime())
+                            .map((project) => (
+                                <div key={project.id} className="group relative">
+                                    <Link 
+                                        href={`/projects/${project.id}`} 
+                                        onClick={() => dispatch(setCurrentProject(project.id))}
+                                        className="block"
+                                    >
+                                        <div className="p-6 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-lg hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm transition-all duration-200 cursor-pointer">
+                                            <div className="flex items-start justify-between">
+                                                <div className="min-w-0 flex-1">
+                                                    <h3 className="font-medium text-gray-900 dark:text-white truncate text-lg">
+                                                        {project.projectName}
+                                                    </h3>
+                                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                                        {getTimeAgo(project.lastModified)}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                    <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button 
+                                                    variant="ghost" 
+                                                    size="icon"
+                                                    className="w-8 h-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                >
+                                                    <MoreHorizontal className="w-4 h-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem 
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
+                                                        handleDeleteProject(project.id);
+                                                    }}
+                                                    className="text-red-600 focus:text-red-600"
+                                                >
+                                                    <Trash2 className="w-4 h-4 mr-2" />
+                                                    Delete
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </div>
+                                </div>
+                            ))}
                     </div>
                 )}
             </div>
 
-            {/* Add Project Modal */}
+            {/* Create Project Modal */}
             <Dialog open={isCreating} onOpenChange={setIsCreating}>
-                <DialogContent className="bg-black border border-white border-opacity-10">
+                <DialogContent className="sm:max-w-md bg-white dark:bg-gray-950 border-gray-200 dark:border-gray-800">
                     <DialogHeader>
-                        <DialogTitle className="text-white">Create New Project</DialogTitle>
-                        <DialogDescription className="text-gray-400">
+                        <DialogTitle className="text-gray-900 dark:text-white">Create New Project</DialogTitle>
+                        <DialogDescription className="text-gray-500 dark:text-gray-400">
                             Enter a name for your new video project.
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                            <Label htmlFor="project-name" className="text-right text-white">
-                                Name
+                    <div className="space-y-4 py-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="project-name" className="text-gray-900 dark:text-white">
+                                Project Name
                             </Label>
                             <Input
                                 id="project-name"
@@ -218,24 +284,25 @@ export default function Projects() {
                                         setIsCreating(false);
                                     }
                                 }}
-                                placeholder="Project Name"
-                                className="col-span-3 bg-darkSurfacePrimary border-white border-opacity-10 text-white focus:border-white"
+                                placeholder="My Video Project"
+                                className="bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 focus:border-gray-400 dark:focus:border-gray-600"
                             />
                         </div>
                     </div>
-                    <DialogFooter>
+                    <DialogFooter className="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
                         <Button 
                             variant="outline" 
                             onClick={() => setIsCreating(false)}
-                            className="bg-darkSurfacePrimary border-white border-opacity-10 text-white hover:bg-gray-800"
+                            className="border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300"
                         >
                             Cancel
                         </Button>
                         <Button 
                             onClick={handleCreateProject}
-                            className="bg-white text-black hover:bg-gray-100"
+                            disabled={!newProjectName.trim()}
+                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
                         >
-                            Create
+                            Create Project
                         </Button>
                     </DialogFooter>
                 </DialogContent>

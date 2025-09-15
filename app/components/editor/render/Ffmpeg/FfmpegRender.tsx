@@ -23,7 +23,7 @@ export default function FfmpegRender({
   ffmpeg,
   logMessages,
 }: FileUploaderProps) {
-  const { mediaFiles, projectName, exportSettings, duration, textElements } =
+  const { mediaFiles, projectName, exportSettings, duration, textElements, resolution } =
     useAppSelector((state) => state.projectState);
   const totalDuration = duration;
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -68,7 +68,7 @@ export default function FfmpegRender({
 
         // Create base black background
         filters.push(
-          `color=c=black:size=1920x1080:d=${totalDuration.toFixed(3)}[base]`
+          `color=c=black:size=${resolution.width}x${resolution.height}:d=${totalDuration.toFixed(3)}[base]`
         );
         // Sort videos by zIndex ascending (lowest drawn first)
         const sortedMediaFiles = [...mediaFiles].sort(

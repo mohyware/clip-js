@@ -18,7 +18,7 @@ export const PreviewPlayer = ({
   compositionHeight,
 }: Props) => {
   const projectState = useAppSelector((state) => state.projectState);
-  const { duration, currentTime, isPlaying, isMuted } = projectState;
+  const { duration, currentTime, isPlaying, isMuted, resolution } = projectState;
   console.log({projectState})
   const dispatch = useDispatch();
   // update frame when current time with marker
@@ -70,10 +70,9 @@ export const PreviewPlayer = ({
   const safeDuration = Math.max(1, durationInFrames || 1);
 
   // Guard against invalid dimensions (e.g., user typed 0, only-audio timelines)
-  const safeWidth =
-    !compositionWidth || compositionWidth <= 0 ? 1920 : compositionWidth;
-  const safeHeight =
-    !compositionHeight || compositionHeight <= 0 ? 1080 : compositionHeight;
+  // Use Redux resolution as the source of truth, fall back to props if needed
+  const safeWidth = resolution.width || compositionWidth || 1920;
+  const safeHeight = resolution.height || compositionHeight || 1080;
 
   return (
   <Player

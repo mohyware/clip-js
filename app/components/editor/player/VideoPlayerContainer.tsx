@@ -1,6 +1,7 @@
 import { PreviewPlayer } from './remotion/Player';
 import { type PlayerRef } from '@remotion/player';
 import { useRef, useEffect, useState } from 'react';
+import { useAppSelector } from '@/app/store';
 
 interface VideoPlayerContainerProps {
   playerRef: React.RefObject<PlayerRef>;
@@ -13,8 +14,14 @@ export default function VideoPlayerContainer({
   compositionWidth, 
   compositionHeight
 }: VideoPlayerContainerProps) {
+  const { resolution } = useAppSelector((state) => state.projectState);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [boxSize, setBoxSize] = useState<{width: number; height: number}>({width: compositionWidth, height: compositionHeight});
+  
+  // Use Redux resolution as source of truth, fallback to props
+  const actualWidth = resolution.width || compositionWidth;
+  const actualHeight = resolution.height || compositionHeight;
+  
+  const [boxSize, setBoxSize] = useState<{width: number; height: number}>({width: actualWidth, height: actualHeight});
 
   // Compute best-fit size so the player always fits without needing browser zoom
   useEffect(() => {
@@ -28,11 +35,11 @@ export default function VideoPlayerContainer({
       if (availableWidth === 0 || availableHeight === 0) return;
 
       const scale = Math.min(
-        availableWidth / compositionWidth,
-        availableHeight / compositionHeight
+        availableWidth / actualWidth,
+        availableHeight / actualHeight
       );
-      const width = Math.floor(compositionWidth * scale);
-      const height = Math.floor(compositionHeight * scale);
+      const width = Math.floor(actualWidth * scale);
+      const height = Math.floor(actualHeight * scale);
       setBoxSize({ width, height });
     };
 
@@ -40,7 +47,7 @@ export default function VideoPlayerContainer({
     const ro = new ResizeObserver(() => compute());
     ro.observe(el);
     return () => ro.disconnect();
-  }, [compositionWidth, compositionHeight]);
+  }, [actualWidth, actualHeight]);
 
   return (
     <div ref={containerRef} className="relative w-full max-full min-h-0 grid place-items-center flex-1 p-4">
@@ -49,13 +56,13 @@ export default function VideoPlayerContainer({
         style={{
           width: `${boxSize.width}px`,
           height: `${boxSize.height}px`,
-          aspectRatio: `${compositionWidth} / ${compositionHeight}`,
+          aspectRatio: `${actualWidth} / ${actualHeight}`,
         }}
       >
         <PreviewPlayer
-          compositionWidth={compositionWidth}
+          compositionWidth={actualWidth}
           playerRef={playerRef}
-          compositionHeight={compositionHeight}
+          compositionHeight={actualHeight}
         />
       </div>
     </div>

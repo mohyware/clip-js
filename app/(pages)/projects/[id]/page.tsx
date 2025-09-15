@@ -168,11 +168,8 @@ export default function Project({ params }: { params: { id: string } }) {
                   <AddText />
               </TabsContent>
 
-              <TabsContent value="export" className="p-4 px-6 m-0">
-                <div className="space-y-4">
-                  <h2 className="text-lg font-semibold">Export Settings</h2>
+              <TabsContent value="export" className="px-4 m-0">
                   <ExportList />
-                </div>
               </TabsContent>
             </Tabs>
           </div>

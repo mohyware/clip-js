@@ -36,8 +36,7 @@ export default function Ffmpeg() {
     }, []);
 
     return (
-        <div className="flex flex-col justify-center items-center py-2">
-            <RenderOptions />
+        <div className="space-y-6">
             <FfmpegRender loadFunction={loadFFmpegFunction} loadFfmpeg={loadFfmpeg} logMessages={logMessages} ffmpeg={ffmpegRef.current} />
         </div>
     );

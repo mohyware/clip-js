@@ -9,6 +9,13 @@ import {
 } from "../../../../store/slices/projectSlice";
 import toast from "react-hot-toast";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Type, Clock, Move, Palette, Layers, Settings } from "lucide-react";
 
 export default function AddTextButton() {
   const [textConfig, setTextConfig] = useState<Partial<TextElement>>({
@@ -82,187 +89,226 @@ export default function AddTextButton() {
   };
 
   return (
-    <ScrollArea className="relative max-h-full">
-      {
-        <div className="flex items-center justify-center z-50">
-          <div className="rounded-lg w-96">
-            <div className="space-y-8">
-              {/* Text Content */}
-              <div>
-                <label className="text-xl font-bold mb-2 text-white">
-                  Content
-                </label>
-                <textarea
-                  value={textConfig.text}
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-6">
+        <Type className="h-5 w-5 text-primary" />
+        <h2 className="text-lg font-semibold ">Add Text Element</h2>
+      </div>
+
+      <ScrollArea className="h-[500px] px-4 ">
+        <div className="space-y-6 px-1">
+          {/* Text Content Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Type className="h-4 w-4 text-muted-foreground" />
+              <Label htmlFor="text-content" className="text-sm font-medium">Content</Label>
+            </div>
+            <Textarea
+              id="text-content"
+              placeholder="Enter your text here..."
+              value={textConfig.text}
+              onChange={(e) =>
+                setTextConfig({ ...textConfig, text: e.target.value })
+              }
+              className="min-h-[80px] resize-none"
+            />
+          </div>
+
+          <Separator />
+
+          {/* Timing Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4 text-muted-foreground" />
+              <Label className="text-sm font-medium">Timing</Label>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="start-time" className="text-xs text-muted-foreground">Start Time (s)</Label>
+                <Input
+                  id="start-time"
+                  type="number"
+                  min={0}
+                  step={0.1}
+                  value={textConfig.positionStart}
                   onChange={(e) =>
-                    setTextConfig({ ...textConfig, text: e.target.value })
+                    setTextConfig({
+                      ...textConfig,
+                      positionStart: Number(e.target.value),
+                    })
                   }
-                  className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
                 />
               </div>
-              
-
-              {/* Start and End Time */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    Start Time (s)
-                  </label>
-                  <input
-                    type="number"
-                    value={textConfig.positionStart}
-                    onChange={(e) =>
-                      setTextConfig({
-                        ...textConfig,
-                        positionStart: Number(e.target.value),
-                      })
-                    }
-                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
-                    min={0}
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    End Time (s)
-                  </label>
-                  <input
-                    type="number"
-                    value={textConfig.positionEnd}
-                    onChange={(e) =>
-                      setTextConfig({
-                        ...textConfig,
-                        positionEnd: Number(e.target.value),
-                      })
-                    }
-                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
-                    min={0}
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="end-time" className="text-xs text-muted-foreground">End Time (s)</Label>
+                <Input
+                  id="end-time"
+                  type="number"
+                  min={0}
+                  step={0.1}
+                  value={textConfig.positionEnd}
+                  onChange={(e) =>
+                    setTextConfig({
+                      ...textConfig,
+                      positionEnd: Number(e.target.value),
+                    })
+                  }
+                />
               </div>
+            </div>
+          </div>
 
-              {/* Position */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    X Position
-                  </label>
-                  <input
-                    type="number"
-                    value={textConfig.x}
-                    onChange={(e) =>
-                      setTextConfig({
-                        ...textConfig,
-                        x: Number(e.target.value),
-                      })
-                    }
-                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    Y Position
-                  </label>
-                  <input
-                    type="number"
-                    value={textConfig.y}
-                    onChange={(e) =>
-                      setTextConfig({
-                        ...textConfig,
-                        y: Number(e.target.value),
-                      })
-                    }
-                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
-                  />
-                </div>
+          <Separator />
+
+          {/* Position Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Move className="h-4 w-4 text-muted-foreground" />
+              <Label className="text-sm font-medium">Position</Label>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="x-position" className="text-xs text-muted-foreground">X Position (px)</Label>
+                <Input
+                  id="x-position"
+                  type="number"
+                  value={textConfig.x}
+                  onChange={(e) =>
+                    setTextConfig({
+                      ...textConfig,
+                      x: Number(e.target.value),
+                    })
+                  }
+                />
               </div>
-
-              {/* Font Size and Z-Index */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    Font Size
-                  </label>
-                  <input
-                    type="number"
-                    value={textConfig.fontSize}
-                    onChange={(e) =>
-                      setTextConfig({
-                        ...textConfig,
-                        fontSize: Number(e.target.value),
-                      })
-                    }
-                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
-                    min={0}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    Z-Index
-                  </label>
-                  <input
-                    type="number"
-                    value={textConfig.zIndex}
-                    onChange={(e) =>
-                      setTextConfig({
-                        ...textConfig,
-                        zIndex: Number(e.target.value),
-                      })
-                    }
-                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
-                    min={0}
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="y-position" className="text-xs text-muted-foreground">Y Position (px)</Label>
+                <Input
+                  id="y-position"
+                  type="number"
+                  value={textConfig.y}
+                  onChange={(e) =>
+                    setTextConfig({
+                      ...textConfig,
+                      y: Number(e.target.value),
+                    })
+                  }
+                />
               </div>
+            </div>
+          </div>
 
-              {/* Font Type */}
-              <div className="grid grid-cols-1 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    Font Type
-                  </label>
-                  <select
-                    value={textConfig.font}
-                    onChange={(e) =>
-                      setTextConfig({ ...textConfig, font: e.target.value })
-                    }
-                    className="w-full p-2 bg-darkSurfacePrimary border border-white border-opacity-10 shadow-md text-white rounded focus:outline-none focus:ring-2 focus:ring-white-500 focus:border-white-500"
-                  >
-                    <option value="Arial">Arial</option>
-                    <option value="Inter">Inter</option>
-                    <option value="Lato">Lato</option>
-                  </select>
-                </div>
+          <Separator />
+
+          {/* Typography Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Settings className="h-4 w-4 text-muted-foreground" />
+              <Label className="text-sm font-medium">Typography</Label>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-2">
+                <Label htmlFor="font-family" className="text-xs text-muted-foreground">Font Family</Label>
+                <Select
+                  value={textConfig.font || "Arial"}
+                  onValueChange={(value) =>
+                    setTextConfig({ ...textConfig, font: value })
+                  }
+                >
+                  <SelectTrigger id="font-family">
+                    <SelectValue placeholder="Select font" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Arial">Arial</SelectItem>
+                    <SelectItem value="Inter">Inter</SelectItem>
+                    <SelectItem value="Lato">Lato</SelectItem>
+                    <SelectItem value="Roboto">Roboto</SelectItem>
+                    <SelectItem value="OpenSans">Open Sans</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="font-size" className="text-xs text-muted-foreground">Font Size (px)</Label>
+                <Input
+                  id="font-size"
+                  type="number"
+                  min={8}
+                  max={500}
+                  value={textConfig.fontSize}
+                  onChange={(e) =>
+                    setTextConfig({
+                      ...textConfig,
+                      fontSize: Number(e.target.value),
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
 
-              {/* Text Color and Add Text Button */}
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-white">
-                    Text Color
-                  </label>
+          <Separator />
+
+          {/* Styling Section */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <Palette className="h-4 w-4 text-muted-foreground" />
+              <Label className="text-sm font-medium">Styling</Label>
+            </div>
+            <div className="space-y-3">
+              <div className="space-y-2">
+                <Label htmlFor="text-color" className="text-xs text-muted-foreground">Text Color</Label>
+                <div className="flex items-center gap-2">
                   <input
+                    id="text-color"
                     type="color"
                     value={textConfig.color}
                     onChange={(e) =>
                       setTextConfig({ ...textConfig, color: e.target.value })
                     }
-                    className="mt-1 block w-full bg-darkSurfacePrimary rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                    className="w-12 h-10 rounded-md border border-input bg-background cursor-pointer"
+                  />
+                  <Input
+                    type="text"
+                    value={textConfig.color}
+                    onChange={(e) =>
+                      setTextConfig({ ...textConfig, color: e.target.value })
+                    }
+                    className="flex-1 font-mono text-sm"
                   />
                 </div>
-                <div className="mt-2 flex justify-end space-x-3">
-                  <button
-                    onClick={handleAddText}
-                    className="px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90 rounded"
-                  >
-                    Add Text
-                  </button>
-                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="z-index" className="text-xs text-muted-foreground">Layer (Z-Index)</Label>
+                <Input
+                  id="z-index"
+                  type="number"
+                  min={0}
+                  value={textConfig.zIndex}
+                  onChange={(e) =>
+                    setTextConfig({
+                      ...textConfig,
+                      zIndex: Number(e.target.value),
+                    })
+                  }
+                />
               </div>
             </div>
           </div>
         </div>
-      }
-    </ScrollArea>
+      </ScrollArea>
+
+      {/* Action Button */}
+      <div className="pt-4 border-t">
+        <Button 
+          onClick={handleAddText} 
+          className="w-full"
+          size="lg"
+        >
+          <Type className="w-4 h-4 mr-2" />
+          Add Text Element
+        </Button>
+      </div>
+    </div>
   );
 }

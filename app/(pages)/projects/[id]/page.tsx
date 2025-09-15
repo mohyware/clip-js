@@ -14,7 +14,7 @@ import {
 import { rehydrate, setMediaFiles } from "../../../store/slices/projectSlice";
 import { setActiveSection } from "../../../store/slices/projectSlice";
 import AddText from "../../../components/editor/AssetsPanel/tools-section/AddText";
-import AddMedia from "../../../components/editor/AssetsPanel/AddButtons/UploadMedia";
+import UploadMedia from "../../../components/editor/AssetsPanel/AddButtons/UploadMedia";
 import MediaList from "../../../components/editor/AssetsPanel/tools-section/MediaList";
 import { useRouter } from "next/navigation";
 import HomeButton from "@/app/components/editor/AssetsPanel/SidebarButtons/HomeButton";
@@ -44,7 +44,7 @@ export default function Project({ params }: { params: { id: string } }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const router = useRouter();
-  const { activeSection, activeElement } = projectState;
+  const { activeSection, activeElement, filesID } = projectState;
   // when page is loaded set the project id if it exists
   useEffect(() => {
     const loadProject = async () => {
@@ -101,7 +101,7 @@ export default function Project({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="flex flex-col h-screen select-none">
+    <div className="flex flex-col h-screen">
       {/* Loading screen */}
       {isLoading ? (
         <div className="fixed inset-0 flex items-center bg-black bg-opacity-50 justify-center z-50">
@@ -111,10 +111,10 @@ export default function Project({ params }: { params: { id: string } }) {
           </div>
         </div>
       ) : null}
-      <div className="flex flex-col h-full">
+      <div className="flex flex-col flex-1 basis-[70%] max-h-[70%]">
         {/* Top Navigation - Horizontal Tabs */}
         {/* Main Content Area */}
-        <div className="flex flex-1 overflow-hidden h-[60%]">
+        <div className="flex flex-1 overflow-hidden">
           {/* Left Panel - Tab Content */}
           <div className="flex-[0.3] min-w-[280px] border-r border-border overflow-y-auto">
             <div className="border-b border-border bg-background">
@@ -153,24 +153,22 @@ export default function Project({ params }: { params: { id: string } }) {
               value={activeSection}
               onValueChange={(value) => handleFocus(value as any)}
             >
-              <TabsContent value="media" className="p-4 m-0">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-semibold">Media Library</h2>
-                    <AddMedia />
+              <TabsContent value="media" className="p-0 m-0">
+                <div className="p-6 space-y-6 h-full">
+                  <div className="space-y-4">
+                    <UploadMedia />
                   </div>
-                  <MediaList />
+                  <div className="flex-1 min-h-0">
+                    <MediaList />
+                  </div>
                 </div>
               </TabsContent>
 
-              <TabsContent value="text" className="p-4 m-0">
-                <div className="space-y-4">
-                  <h2 className="text-lg font-semibold">Text Elements</h2>
+              <TabsContent value="text" className="p-4 px-6 m-0 h-full ">
                   <AddText />
-                </div>
               </TabsContent>
 
-              <TabsContent value="export" className="p-4 m-0">
+              <TabsContent value="export" className="p-4 px-6 m-0">
                 <div className="space-y-4">
                   <h2 className="text-lg font-semibold">Export Settings</h2>
                   <ExportList />
@@ -208,7 +206,7 @@ export default function Project({ params }: { params: { id: string } }) {
         </div>
       </div>
       {/* Timeline at bottom */}
-      <div className="flex flex-row border-t border-border h-[40%] min-h-[200px]">
+      <div className="flex flex-row border-t border-border basis-[30%] ">
         <div className="flex flex-col items-center justify-center mt-20">
           <div className="relative h-16">
             <div className="flex items-center gap-2 p-4">

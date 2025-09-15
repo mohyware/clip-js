@@ -4,10 +4,10 @@ import { getFile, useAppDispatch, useAppSelector } from "../../../../store";
 import { setMediaFiles } from "../../../../store/slices/projectSlice";
 import { storeFile } from "../../../../store";
 import { categorizeFile } from "../../../../utils/utils";
-import Image from 'next/image';
 import { Plus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 export default function AddMedia({ fileId }: { fileId: string }) {
     const { mediaFiles } = useAppSelector((state) => state.projectState);
@@ -49,17 +49,26 @@ export default function AddMedia({ fileId }: { fileId: string }) {
             });
         }
         dispatch(setMediaFiles(updatedMedia));
-        toast.success('Media added successfully.');
+        toast.success('Media added to timeline');
     };
 
     return (
-        <Button
-            variant="secondary"
-            size="icon"
-            onClick={handleFileChange}
-            className="rounded-full bg-white text-gray-800 hover:bg-gray-100 h-8 w-8"
-        >
-            <Plus className="text-black" size={12} />
-        </Button>
+        <TooltipProvider>
+            <Tooltip>
+                <TooltipTrigger asChild>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={handleFileChange}
+                        className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+                    >
+                        <Plus className="h-4 w-4" />
+                    </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Add to timeline</p>
+                </TooltipContent>
+            </Tooltip>
+        </TooltipProvider>
     );
 }

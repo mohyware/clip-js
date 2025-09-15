@@ -17,9 +17,6 @@ import AddText from "../../../components/editor/AssetsPanel/tools-section/AddTex
 import AddMedia from "../../../components/editor/AssetsPanel/AddButtons/UploadMedia";
 import MediaList from "../../../components/editor/AssetsPanel/tools-section/MediaList";
 import { useRouter } from "next/navigation";
-import TextButton from "@/app/components/editor/AssetsPanel/SidebarButtons/TextButton";
-import LibraryButton from "@/app/components/editor/AssetsPanel/SidebarButtons/LibraryButton";
-import ExportButton from "@/app/components/editor/AssetsPanel/SidebarButtons/ExportButton";
 import HomeButton from "@/app/components/editor/AssetsPanel/SidebarButtons/HomeButton";
 import ShortcutsButton from "@/app/components/editor/AssetsPanel/SidebarButtons/ShortcutsButton";
 import MediaProperties from "../../../components/editor/PropertiesSection/MediaProperties";
@@ -29,8 +26,16 @@ import { PreviewPlayer } from "../../../components/editor/player/remotion/Player
 import { MediaFile } from "@/app/types";
 import ExportList from "../../../components/editor/AssetsPanel/tools-section/ExportList";
 import Image from "next/image";
-import { Video, Music, ImageIcon, Type } from "lucide-react";
+import {
+  Video,
+  Music,
+  ImageIcon,
+  Type,
+  FolderOpen,
+  Download,
+} from "lucide-react";
 import ProjectName from "../../../components/editor/player/ProjectName";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 export default function Project({ params }: { params: { id: string } }) {
   const { id } = params;
   const dispatch = useAppDispatch();
@@ -106,70 +111,108 @@ export default function Project({ params }: { params: { id: string } }) {
           </div>
         </div>
       ) : null}
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left Sidebar - Buttons */}
-        <div className="flex-[0.1] min-w-[60px] max-w-[100px] border-r border-border overflow-y-auto p-4">
-          <div className="flex flex-col space-y-2">
-            <HomeButton />
-            <TextButton onClick={() => handleFocus("text")} />
-            <LibraryButton onClick={() => handleFocus("media")} />
-            <ExportButton onClick={() => handleFocus("export")} />
-            {/* TODO: add shortcuts guide but in a better way */}
-            {/* <ShortcutsButton onClick={() => handleFocus("export")} /> */}
+      <div className="flex flex-col h-full">
+        {/* Top Navigation - Horizontal Tabs */}
+        {/* Main Content Area */}
+        <div className="flex flex-1 overflow-hidden h-[60%]">
+          {/* Left Panel - Tab Content */}
+          <div className="flex-[0.3] min-w-[280px] border-r border-border overflow-y-auto">
+            <div className="border-b border-border bg-background">
+              <div className="px-6 py-3">
+                <Tabs
+                  value={activeSection}
+                  onValueChange={(value) => handleFocus(value as any)}
+                >
+                  <TabsList className="grid w-full max-w-md grid-cols-3">
+                    <TabsTrigger
+                      value="media"
+                      className="flex items-center gap-2"
+                    >
+                      <FolderOpen className="h-4 w-4" />
+                      Library
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="text"
+                      className="flex items-center gap-2"
+                    >
+                      <Type className="h-4 w-4" />
+                      Text
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="export"
+                      className="flex items-center gap-2"
+                    >
+                      <Download className="h-4 w-4" />
+                      Export
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            </div>
+            <Tabs
+              value={activeSection}
+              onValueChange={(value) => handleFocus(value as any)}
+            >
+              <TabsContent value="media" className="p-4 m-0">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold">Media Library</h2>
+                    <AddMedia />
+                  </div>
+                  <MediaList />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="text" className="p-4 m-0">
+                <div className="space-y-4">
+                  <h2 className="text-lg font-semibold">Text Elements</h2>
+                  <AddText />
+                </div>
+              </TabsContent>
+
+              <TabsContent value="export" className="p-4 m-0">
+                <div className="space-y-4">
+                  <h2 className="text-lg font-semibold">Export Settings</h2>
+                  <ExportList />
+                </div>
+              </TabsContent>
+            </Tabs>
           </div>
-        </div>
 
-        {/* Add media and text */}
-        <div className="flex-[0.3] min-w-[200px] border-r border-border overflow-y-auto p-4">
-          {activeSection === "media" && (
-            <div>
-              <h2 className="text-lg flex flex-row gap-2 items-center justify-center font-semibold mb-2">
-                <AddMedia />
-              </h2>
-              <MediaList />
-            </div>
-          )}
-          {activeSection === "text" && (
-            <div>
-              <AddText />
-            </div>
-          )}
-          {activeSection === "export" && (
-            <div>
-              <h2 className="text-lg font-semibold mb-4">Export</h2>
-              <ExportList />
-            </div>
-          )}
-        </div>
+          {/* Center - Video Preview */}
+          <div className="flex items-center justify-center flex-col flex-[1] overflow-hidden bg-muted/30">
+            <ProjectName />
+            <PreviewPlayer />
+          </div>
 
-        {/* Center - Video Preview */}
-        <div className="flex items-center justify-center flex-col flex-[1] overflow-hidden">
-          <ProjectName />
-          <PreviewPlayer />
-        </div>
-
-        {/* Right Sidebar - Element Properties */}
-        <div className="flex-[0.4] min-w-[200px] border-l border-border overflow-y-auto p-4">
-          {activeElement === "media" && (
-            <div>
-              <h2 className="text-lg font-semibold mb-4">Media Properties</h2>
-              <MediaProperties />
-            </div>
-          )}
-          {activeElement === "text" && (
-            <div>
-              <h2 className="text-lg font-semibold mb-4">Text Properties</h2>
-              <TextProperties />
-            </div>
-          )}
+          {/* Right Sidebar - Element Properties */}
+          <div className="flex-[0.3] min-w-[280px] border-l border-border overflow-y-auto p-4">
+            {activeElement === "media" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-semibold">Media Properties</h2>
+                <MediaProperties />
+              </div>
+            )}
+            {activeElement === "text" && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-semibold">Text Properties</h2>
+                <TextProperties />
+              </div>
+            )}
+            {!activeElement && (
+              <div className="flex items-center justify-center h-full text-muted-foreground">
+                <p>Select an element to view properties</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       {/* Timeline at bottom */}
-      <div className="flex flex-row border-t border-border">
+      <div className="flex flex-row border-t border-border h-[40%] min-h-[200px]">
         <div className="flex flex-col items-center justify-center mt-20">
           <div className="relative h-16">
             <div className="flex items-center gap-2 p-4">
-              <Video className="h-4 w-4"/>
+              <Video className="h-4 w-4" />
             </div>
           </div>
 
@@ -187,7 +230,7 @@ export default function Project({ params }: { params: { id: string } }) {
 
           <div className="relative h-16">
             <div className="flex items-center gap-2 p-4">
-              <Type className="h-4 w-4"/>
+              <Type className="h-4 w-4" />
             </div>
           </div>
         </div>

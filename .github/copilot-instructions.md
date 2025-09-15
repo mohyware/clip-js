@@ -77,6 +77,15 @@ Complex filter chains in `app/components/editor/render/Ffmpeg/FfmpegRender.tsx`:
 - **Styling**: Leverage design system colors from globals.css, avoid hardcoded colors
 - **Timeline sync**: Keep Remotion player and custom timeline in sync via Redux state
 
+### 🚫 Styling Rules (Critical)
+
+- Do not use custom colors (inline hex, RGB, Tailwind arbitrary colors, or hardcoded utility classes).
+- ❌ bg-[#123456], text-red-500, border-blue-700
+- ❌ Inline style={{ color: 'blue' }} or CSS overrides
+- ✅ Always use shadcn/ui default tokens and components as they are, dont manually add colors and styles in the components.
+- ✅ If customization is required, use the CSS custom properties defined in app/globals.css.
+- ✅ Follow the design system colors and variants (e.g., variant="destructive", variant="secondary"), never invent new ones.
+
 ### Common Tasks
 
 - Adding media types: Create timeline component + Remotion sequence item + FFmpeg filter logic

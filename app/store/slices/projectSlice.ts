@@ -108,6 +108,21 @@ const projectStateSlice = createSlice({
         setTimelineZoom: (state, action: PayloadAction<number>) => {
             state.timelineZoom = action.payload;
         },
+        setAspectRatio: (state, action: PayloadAction<string>) => {
+            state.aspectRatio = action.payload;
+            // Update resolution based on aspect ratio
+            const aspectRatios = {
+                '16:9': { width: 1920, height: 1080 },
+                '4:3': { width: 1440, height: 1080 },
+                '1:1': { width: 1080, height: 1080 },
+                '9:16': { width: 1080, height: 1920 },
+                '21:9': { width: 2560, height: 1080 },
+            } as const;
+            const selectedRatio = aspectRatios[action.payload as keyof typeof aspectRatios];
+            if (selectedRatio) {
+                state.resolution = selectedRatio;
+            }
+        },
         setMarkerTrack: (state, action: PayloadAction<boolean>) => {
             state.enableMarkerTracking = action.payload;
         },
@@ -139,6 +154,7 @@ export const {
     setActiveElement,
     setActiveElementIndex,
     setTimelineZoom,
+    setAspectRatio,
     rehydrate,
     createNewProject,
 } = projectStateSlice.actions;

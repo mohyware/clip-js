@@ -1,47 +1,112 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import {
+  FullscreenButton,
+  MuteButton,
+} from "@/app/components/editor/player/remotion/PlayerButton";
+import { MediaFile } from "@/app/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { type PlayerRef } from "@remotion/player";
+import {
+  Download,
+  FolderOpen,
+  ImageIcon,
+  Music,
+  Pause,
+  Play,
+  Type,
+  Video,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import UploadMedia from "../../../components/editor/AssetsPanel/AddButtons/UploadMedia";
+import AddText from "../../../components/editor/AssetsPanel/tools-section/AddText";
+import ExportList from "../../../components/editor/AssetsPanel/tools-section/ExportList";
+import MediaList from "../../../components/editor/AssetsPanel/tools-section/MediaList";
+import { PreviewPlayer } from "../../../components/editor/player/remotion/Player";
+import VideoPlayerContainer from "../../../components/editor/player/VideoPlayerContainer";
+import AspectRatioControl from "../../../components/editor/player/AspectRatioControl";
+import MediaProperties from "../../../components/editor/PropertiesSection/MediaProperties";
+import TextProperties from "../../../components/editor/PropertiesSection/TextProperties";
+import { Timeline } from "../../../components/editor/timeline/Timline";
 import {
   getFile,
+  getProject,
   storeProject,
   useAppDispatch,
   useAppSelector,
 } from "../../../store";
-import { getProject } from "../../../store";
+import {
+  rehydrate,
+  setActiveSection,
+  setMediaFiles,
+} from "../../../store/slices/projectSlice";
 import {
   setCurrentProject,
   updateProject,
 } from "../../../store/slices/projectsSlice";
-import { rehydrate, setMediaFiles } from "../../../store/slices/projectSlice";
-import { setActiveSection } from "../../../store/slices/projectSlice";
-import AddText from "../../../components/editor/AssetsPanel/tools-section/AddText";
-import UploadMedia from "../../../components/editor/AssetsPanel/AddButtons/UploadMedia";
-import MediaList from "../../../components/editor/AssetsPanel/tools-section/MediaList";
-import { useRouter } from "next/navigation";
-import HomeButton from "@/app/components/editor/AssetsPanel/SidebarButtons/HomeButton";
-import ShortcutsButton from "@/app/components/editor/AssetsPanel/SidebarButtons/ShortcutsButton";
-import MediaProperties from "../../../components/editor/PropertiesSection/MediaProperties";
-import TextProperties from "../../../components/editor/PropertiesSection/TextProperties";
-import { Timeline } from "../../../components/editor/timeline/Timline";
-import { PreviewPlayer } from "../../../components/editor/player/remotion/Player";
-import { MediaFile } from "@/app/types";
-import ExportList from "../../../components/editor/AssetsPanel/tools-section/ExportList";
-import Image from "next/image";
-import {
-  Video,
-  Music,
-  ImageIcon,
-  Type,
-  FolderOpen,
-  Download,
-} from "lucide-react";
-import ProjectName from "../../../components/editor/player/ProjectName";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 export default function Project({ params }: { params: { id: string } }) {
+  const playerRef = useRef<PlayerRef>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const togglePlayback = useCallback(() => {
+    const player = playerRef.current;
+    if (player) {
+      if (player.isPlaying()) {
+        player.pause();
+        setIsPlaying(false);
+      } else {
+        player.play();
+        setIsPlaying(true);
+      }
+    }
+  }, []);
   const { id } = params;
   const dispatch = useAppDispatch();
   const projectState = useAppSelector((state) => state.projectState);
   const { currentProjectId } = useAppSelector((state) => state.projects);
   const [isLoading, setIsLoading] = useState(true);
+  // Text fields for width/height to allow clearing while typing
+  const [width, setWidth] = useState<number>(1920);
+  const [height, setHeight] = useState<number>(1080);
+  const [widthInput, setWidthInput] = useState<string>("1920");
+  const [heightInput, setHeightInput] = useState<string>("1080");
+  const widthInputRef = useRef<HTMLInputElement>(null);
+  const heightInputRef = useRef<HTMLInputElement>(null);
+
+  const handleWidthChange = useCallback((newWidth: number) => {
+    setWidth(newWidth);
+    setWidthInput(String(newWidth));
+  }, []);
+
+  const handleHeightChange = useCallback((newHeight: number) => {
+    setHeight(newHeight);
+    setHeightInput(String(newHeight));
+  }, []);
+
+  // Handler for when aspect ratio changes
+  const handleDimensionChange = useCallback((newWidth: number, newHeight: number) => {
+    setWidth(newWidth);
+    setHeight(newHeight);
+    setWidthInput(String(newWidth));
+    setHeightInput(String(newHeight));
+  }, []);
+
+  const [isAutoSize, setIsAutoSize] = useState<boolean>(false);
+  const commitWidth = useCallback(() => {
+    const parsed = Number(widthInput);
+    const safe = !isFinite(parsed) || parsed <= 0 ? 1920 : parsed;
+    setWidth(safe);
+    setWidthInput(String(safe));
+  }, [widthInput]);
+
+  const commitHeight = useCallback(() => {
+    const parsed = Number(heightInput);
+    const safe = !isFinite(parsed) || parsed <= 0 ? 1080 : parsed;
+    setHeight(safe);
+    setHeightInput(String(safe));
+  }, [heightInput]);
 
   const router = useRouter();
   const { activeSection, activeElement, filesID } = projectState;
@@ -165,19 +230,62 @@ export default function Project({ params }: { params: { id: string } }) {
               </TabsContent>
 
               <TabsContent value="text" className="p-4 px-6 m-0 h-full ">
-                  <AddText />
+                <AddText />
               </TabsContent>
 
               <TabsContent value="export" className="px-4 m-0">
-                  <ExportList />
+                <ExportList />
               </TabsContent>
             </Tabs>
           </div>
 
           {/* Center - Video Preview */}
-          <div className="flex items-center justify-center flex-col flex-[1] overflow-hidden bg-muted/30">
-            <ProjectName />
-            <PreviewPlayer />
+          <div className="flex items-center justify-center flex-col flex-[1] overflow-hidden bg-muted/30 w-full">
+            {/* <ProjectName />
+            <PreviewPlayer /> */}
+
+            <div className="h-full flex flex-col bg-background w-full">
+              <div className="h-10 border-b border-border/50 bg-muted/30 flex items-center justify-between px-3 shrink-0 gap-2">
+                <div className="flex items-center gap-2">
+                  <AspectRatioControl onDimensionChange={handleDimensionChange} />
+                </div>
+              </div>
+              {/* Video preview with new container */}
+              <VideoPlayerContainer
+                playerRef={playerRef}
+                compositionWidth={width}
+                compositionHeight={height}
+              />
+
+              {/* External Player Controls (kept outside the preview) */}
+              <div className="w-full flex items-center justify-center gap-2 py-2 px-4 border-t border-border/50 bg-background/60">
+                {/* Left side controls */}
+                <div className="flex items-center gap-1">
+                  <MuteButton playerRef={playerRef} />
+                </div>
+
+                {/* Center play/pause button */}
+                <div className="flex items-center">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={togglePlayback}
+                    className="h-7 px-2"
+                  >
+                    {isPlaying ? (
+                      <Pause className="h-4 w-4" />
+                    ) : (
+                      <Play className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
+
+                {/* Right side controls */}
+                <div className="flex items-center gap-1">
+                  <FullscreenButton playerRef={playerRef} />
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Right Sidebar - Element Properties */}

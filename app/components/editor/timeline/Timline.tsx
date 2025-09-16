@@ -8,8 +8,10 @@ import {
   setTextElements,
   setTimelineZoom,
 } from "@/app/store/slices/projectSlice";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { throttle } from "lodash";
-import { Check, Copy, Scissors, Trash2, X } from "lucide-react";
+import { Check, Copy, Scissors, Trash2, X, ZoomIn, ZoomOut } from "lucide-react";
 import { memo, useMemo, useRef } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -222,115 +224,121 @@ export const Timeline = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-2">
-      <div className="flex flex-row items-center justify-between gap-12 w-full">
+    <div className="flex w-full flex-col gap-4 p-4 bg-background border rounded-lg shadow-sm">
+      {/* Timeline Controls Header */}
+      <div className="flex flex-row items-center justify-between gap-4 w-full">
+        {/* Action Buttons */}
         <div className="flex flex-row items-center gap-2">
-          {/* Track Marker */}
-          <button
+          <Button
             onClick={() => dispatch(setMarkerTrack(!enableMarkerTracking))}
-            className="timeline-button bg-secondary text-secondary-foreground border hover:bg-accent mt-2 h-auto px-2 py-1"
+            variant={enableMarkerTracking ? "default" : "outline"}
+            size="sm"
+            className="gap-2"
           >
             {enableMarkerTracking ? (
               <Check className="h-4 w-4" />
             ) : (
               <X className="h-4 w-4" />
             )}
-            <span className="ml-2">
-              Track Marker <span className="text-xs">(T)</span>
-            </span>
-          </button>
-          {/* Split */}
-          <button
+            Track Marker
+            <span className="text-xs opacity-60">(T)</span>
+          </Button>
+
+          <Button
             onClick={handleSplit}
-            className="timeline-button bg-secondary text-secondary-foreground border hover:bg-accent mt-2 h-auto px-2 py-1"
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            disabled={!activeElement}
           >
             <Scissors className="h-4 w-4" />
-            <span className="ml-2">
-              Split <span className="text-xs">(S)</span>
-            </span>
-          </button>
-          {/* Duplicate */}
-          <button
+            Split
+            <span className="text-xs opacity-60">(S)</span>
+          </Button>
+
+          <Button
             onClick={handleDuplicate}
-            className="timeline-button bg-secondary text-secondary-foreground border hover:bg-accent mt-2 h-auto px-2 py-1"
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            disabled={!activeElement}
           >
             <Copy className="h-4 w-4" />
-            <span className="ml-2">
-              Duplicate <span className="text-xs">(D)</span>
-            </span>
-          </button>
-          {/* Delete */}
-          <button
+            Duplicate
+            <span className="text-xs opacity-60">(D)</span>
+          </Button>
+
+          <Button
             onClick={handleDelete}
-            className="timeline-button bg-destructive text-destructive-foreground border hover:bg-destructive/90 mt-2 h-auto px-2 py-1"
+            variant="destructive"
+            size="sm"
+            className="gap-2"
+            disabled={!activeElement}
           >
             <Trash2 className="h-4 w-4" />
-            <span className="ml-2">
-              Delete <span className="text-xs">(Del)</span>
-            </span>
-          </button>
+            Delete
+            <span className="text-xs opacity-60">(Del)</span>
+          </Button>
         </div>
 
-        {/* Timeline Zoom */}
-        <div className="flex flex-row justify-between items-center gap-2 mr-4">
-          <label className="block text-sm mt-1 font-semibold text-foreground">
-            Zoom
-          </label>
-          <span className="text-foreground text-lg">-</span>
-          <input
-            type="range"
-            min={30}
-            max={120}
-            step="1"
-            value={timelineZoom}
-            onChange={(e) => throttledZoom(Number(e.target.value))}
-            className="w-[100px] bg-background border border-border shadow-md text-foreground rounded focus:outline-none focus:ring-2 focus:ring-ring"
-          />
-          <span className="text-foreground text-lg">+</span>
+        {/* Timeline Zoom Control */}
+        <div className="flex flex-row items-center gap-3 px-4 py-2 bg-muted rounded-md">
+          <ZoomOut className="h-4 w-4 text-muted-foreground" />
+          <div className="flex flex-col items-center gap-1">
+            <span className="text-xs font-medium text-muted-foreground">Zoom</span>
+            <Slider
+              value={[timelineZoom]}
+              onValueChange={(value) => throttledZoom(value[0])}
+              min={30}
+              max={120}
+              step={1}
+              className="w-24"
+            />
+          </div>
+          <ZoomIn className="h-4 w-4 text-muted-foreground" />
         </div>
       </div>
 
+      {/* Timeline Container */}
       <div
-        className="relative overflow-x-auto w-full border-t border-border bg-background z-10"
+        className="relative overflow-x-auto w-full border border-border bg-background rounded-md shadow-inner"
         ref={timelineRef}
         onClick={handleClick}
       >
         {/* Timeline Header */}
         <Header />
 
-        <div
-          className="bg-background"
-          style={{
-            width: "100%" /* or whatever width your timeline requires */,
-          }}
-        >
-          {/* Timeline cursor */}
+        {/* Timeline Content */}
+        <div className="bg-background relative">
+          {/* Timeline Cursor */}
           <div
-            className="absolute top-0 bottom-0 w-[2px] bg-destructive z-50"
+            className="absolute top-0 bottom-0 w-0.5 bg-destructive z-50 shadow-sm"
             style={{
               left: `${currentTime * timelineZoom}px`,
             }}
           />
-          {/* Timeline elements */}
-          <div className="w-full">
-            <div className="relative h-16 z-10">
+          
+          {/* Timeline Tracks */}
+          <div className="w-full divide-y divide-border">
+            <div className="relative h-16 hover:bg-muted/20 transition-colors">
               <VideoTimeline />
             </div>
 
-            <div className="relative h-16 z-10">
+            <div className="relative h-16 hover:bg-muted/20 transition-colors">
               <AudioTimeline />
             </div>
 
-            <div className="relative h-16 z-10">
+            <div className="relative h-16 hover:bg-muted/20 transition-colors">
               <ImageTimeline />
             </div>
 
-            <div className="relative h-16 z-10">
+            <div className="relative h-16 hover:bg-muted/20 transition-colors">
               <TextTimeline />
             </div>
           </div>
         </div>
       </div>
+      
       <GlobalKeyHandlerProps
         handleDuplicate={handleDuplicate}
         handleSplit={handleSplit}

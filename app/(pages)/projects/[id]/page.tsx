@@ -7,6 +7,7 @@ import { MediaFile } from "@/app/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { type PlayerRef } from "@remotion/player";
 import {
   Download,
@@ -167,7 +168,7 @@ export default function Project({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="h-screen flex flex-col overflow-hidden">
       {/* Loading screen */}
       {isLoading ? (
         <div className="fixed inset-0 flex items-center bg-background/80 backdrop-blur-sm justify-center z-50">
@@ -177,172 +178,203 @@ export default function Project({ params }: { params: { id: string } }) {
           </div>
         </div>
       ) : null}
-      <div className="flex flex-col flex-1 basis-[70%] max-h-[70%]">
-        {/* Top Navigation - Horizontal Tabs */}
-        {/* Main Content Area */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left Panel - Tab Content */}
-          <div className="flex-[0.3] min-w-[280px] border-r border-border overflow-y-auto">
-            <div className="border-b border-border bg-background">
-              <div className="px-6 py-3">
-                <Tabs
-                  value={activeSection}
-                  onValueChange={(value) => handleFocus(value as any)}
-                >
-                  <TabsList className="grid w-full max-w-md grid-cols-3">
-                    <TabsTrigger
-                      value="media"
-                      className="flex items-center gap-2"
+      
+      {/* Main Resizable Layout */}
+      <ResizablePanelGroup direction="vertical" className="h-full">
+        {/* Main Editor Area - Resizable with timeline */}
+        <ResizablePanel defaultSize={75} minSize={50}>
+          <ResizablePanelGroup direction="horizontal" className="h-full">
+            {/* Left Panel - Resizable */}
+            <ResizablePanel defaultSize={22} minSize={15} maxSize={35}>
+              <div className="h-full border-r border-border flex flex-col overflow-hidden">
+                <div className="border-b border-border bg-background shrink-0">
+                  <div className="px-6 py-3">
+                    <Tabs
+                      value={activeSection}
+                      onValueChange={(value) => handleFocus(value as any)}
                     >
-                      <FolderOpen className="h-4 w-4" />
-                      Library
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="text"
-                      className="flex items-center gap-2"
-                    >
-                      <Type className="h-4 w-4" />
-                      Text
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="export"
-                      className="flex items-center gap-2"
-                    >
-                      <Download className="h-4 w-4" />
-                      Export
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              </div>
-            </div>
-            <Tabs
-              value={activeSection}
-              onValueChange={(value) => handleFocus(value as any)}
-            >
-              <TabsContent value="media" className="p-0 m-0">
-                <div className="py-2 px-6 m-0 h-full">
-                  <div className="space-y-4">
-                    <UploadMedia />
-                  </div>
-                  <div className="flex-1 min-h-0">
-                    <MediaList />
+                      <TabsList className="grid w-full max-w-md grid-cols-3">
+                        <TabsTrigger
+                          value="media"
+                          className="flex items-center gap-2"
+                        >
+                          <FolderOpen className="h-4 w-4" />
+                          Library
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="text"
+                          className="flex items-center gap-2"
+                        >
+                          <Type className="h-4 w-4" />
+                          Text
+                        </TabsTrigger>
+                        <TabsTrigger
+                          value="export"
+                          className="flex items-center gap-2"
+                        >
+                          <Download className="h-4 w-4" />
+                          Export
+                        </TabsTrigger>
+                      </TabsList>
+                    </Tabs>
                   </div>
                 </div>
-              </TabsContent>
-
-              <TabsContent value="text" className="p-4 px-6 m-0 h-full ">
-                <AddText />
-              </TabsContent>
-
-              <TabsContent value="export" className="px-4 m-0">
-                <ExportList />
-              </TabsContent>
-            </Tabs>
-          </div>
-
-          {/* Center - Video Preview */}
-          <div className="flex items-center justify-center flex-col flex-[1] overflow-hidden bg-muted/30 w-full">
-            {/* <ProjectName />
-            <PreviewPlayer /> */}
-
-            <div className="h-full flex flex-col bg-background w-full">
-              <div className="h-10 border-b border-border bg-muted/30 flex items-center justify-between px-3 shrink-0 gap-2">
-                <div className="flex items-center gap-2">
-                  <AspectRatioControl onDimensionChange={handleDimensionChange} />
-                </div>
-                <div className="flex items-center gap-2">
-                  <ThemeSwitch />
-                </div>
-              </div>
-              {/* Video preview with new container */}
-              <VideoPlayerContainer
-                playerRef={playerRef}
-                compositionWidth={width}
-                compositionHeight={height}
-              />
-
-              {/* External Player Controls (kept outside the preview) */}
-              <div className="w-full flex items-center justify-center gap-2 py-2 px-4 border-t border-border bg-background">
-                {/* Left side controls */}
-                <div className="flex items-center gap-1">
-                  <MuteButton playerRef={playerRef} />
-                </div>
-
-                {/* Center play/pause button */}
-                <div className="flex items-center">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={togglePlayback}
-                    className="h-7 px-2"
+                
+                <div className="flex-1 overflow-hidden">
+                  <Tabs
+                    value={activeSection}
+                    onValueChange={(value) => handleFocus(value as any)}
                   >
-                    {isPlaying ? (
-                      <Pause className="h-4 w-4" />
-                    ) : (
-                      <Play className="h-4 w-4" />
-                    )}
-                  </Button>
+                    <TabsContent value="media" className="p-0 m-0 h-full flex flex-col">
+                      <div className="p-6 space-y-4 shrink-0">
+                        <UploadMedia />
+                      </div>
+                      <div className="flex-1 px-6 pb-6 overflow-y-auto min-h-0">
+                        <MediaList />
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="text" className="p-6 h-full overflow-y-auto">
+                      <AddText />
+                    </TabsContent>
+
+                    <TabsContent value="export" className="p-6 h-full overflow-y-auto">
+                      <ExportList />
+                    </TabsContent>
+                  </Tabs>
+                </div>
+              </div>
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
+
+            {/* Center - Video Preview */}
+            <ResizablePanel defaultSize={56} minSize={30}>
+              <div className="h-full flex flex-col bg-muted/30 overflow-hidden">
+                <div className="h-12 border-b border-border bg-muted/30 flex items-center justify-between px-4 shrink-0">
+                  <div className="flex items-center gap-2">
+                    <AspectRatioControl onDimensionChange={handleDimensionChange} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <ThemeSwitch />
+                  </div>
+                </div>
+                
+                {/* Video Container - Takes remaining space */}
+                <div className="flex-1 flex flex-col bg-background min-h-0">
+                  <div className="flex-1 overflow-hidden">
+                    <VideoPlayerContainer
+                      playerRef={playerRef}
+                      compositionWidth={width}
+                      compositionHeight={height}
+                    />
+                  </div>
+
+                  {/* Player Controls - Fixed at bottom */}
+                  <div className="h-14 flex items-center justify-center gap-2 px-4 border-t border-border bg-background shrink-0">
+                    <div className="flex items-center gap-1">
+                      <MuteButton playerRef={playerRef} />
+                    </div>
+
+                    <div className="flex items-center">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={togglePlayback}
+                        className="h-8 px-3"
+                      >
+                        {isPlaying ? (
+                          <Pause className="h-4 w-4" />
+                        ) : (
+                          <Play className="h-4 w-4" />
+                        )}
+                      </Button>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <FullscreenButton playerRef={playerRef} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ResizablePanel>
+
+            <ResizableHandle withHandle />
+
+            {/* Right Sidebar - Element Properties */}
+            <ResizablePanel defaultSize={22} minSize={15} maxSize={35}>
+              <div className="h-full border-l border-border overflow-y-auto p-4">
+                {activeElement === "media" && (
+                  <div className="space-y-4">
+                    <h2 className="text-lg font-semibold">Media Properties</h2>
+                    <MediaProperties />
+                  </div>
+                )}
+                {activeElement === "text" && (
+                  <div className="space-y-4">
+                    <h2 className="text-lg font-semibold">Text Properties</h2>
+                    <TextProperties />
+                  </div>
+                )}
+                {!activeElement && (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">
+                    <p>Select an element to view properties</p>
+                  </div>
+                )}
+              </div>
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        </ResizablePanel>
+
+        <ResizableHandle withHandle />
+        
+        {/* Timeline Section - Resizable height */}
+        <ResizablePanel defaultSize={25} minSize={15} maxSize={50}>
+          <div className="h-full border-t border-border flex overflow-hidden">
+            {/* Timeline Track Labels */}
+            <div className="w-20 flex flex-col bg-background border-r border-border shrink-0">
+              <div className="h-12 border-b border-border flex items-center justify-center bg-muted/30">
+                <span className="text-xs font-medium text-muted-foreground">Tracks</span>
+              </div>
+              
+              <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex items-center justify-center border-b border-border/50">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Video className="h-4 w-4" />
+                    <span className="text-xs">Video</span>
+                  </div>
                 </div>
 
-                {/* Right side controls */}
-                <div className="flex items-center gap-1">
-                  <FullscreenButton playerRef={playerRef} />
+                <div className="flex-1 flex items-center justify-center border-b border-border/50">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Music className="h-4 w-4" />
+                    <span className="text-xs">Audio</span>
+                  </div>
+                </div>
+
+                <div className="flex-1 flex items-center justify-center border-b border-border/50">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <ImageIcon className="h-4 w-4" />
+                    <span className="text-xs">Images</span>
+                  </div>
+                </div>
+
+                <div className="flex-1 flex items-center justify-center">
+                  <div className="flex items-center gap-2 text-muted-foreground">
+                    <Type className="h-4 w-4" />
+                    <span className="text-xs">Text</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Right Sidebar - Element Properties */}
-          <div className="flex-[0.3] min-w-[280px] border-l border-border overflow-y-auto p-4">
-            {activeElement === "media" && (
-              <div className="space-y-4">
-                <h2 className="text-lg font-semibold">Media Properties</h2>
-                <MediaProperties />
-              </div>
-            )}
-            {activeElement === "text" && (
-              <div className="space-y-4">
-                <h2 className="text-lg font-semibold">Text Properties</h2>
-                <TextProperties />
-              </div>
-            )}
-            {!activeElement && (
-              <div className="flex items-center justify-center h-full text-muted-foreground">
-                <p>Select an element to view properties</p>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-      {/* Timeline at bottom */}
-      <div className="flex flex-row border-t border-border basis-[30%] ">
-        <div className="flex flex-col items-center justify-center mt-20">
-          <div className="relative h-16">
-            <div className="flex items-center gap-2 p-4">
-              <Video className="h-4 w-4" />
+            
+            {/* Timeline Content */}
+            <div className="flex-1 overflow-hidden">
+              <Timeline />
             </div>
           </div>
-
-          <div className="relative h-16">
-            <div className="flex items-center gap-2 p-4">
-              <Music className="h-4 w-4" />
-            </div>
-          </div>
-
-          <div className="relative h-16">
-            <div className="flex items-center gap-2 p-4">
-              <ImageIcon className="h-4 w-4" />
-            </div>
-          </div>
-
-          <div className="relative h-16">
-            <div className="flex items-center gap-2 p-4">
-              <Type className="h-4 w-4" />
-            </div>
-          </div>
-        </div>
-        <Timeline />
-      </div>
+        </ResizablePanel>
+      </ResizablePanelGroup>
     </div>
   );
 }

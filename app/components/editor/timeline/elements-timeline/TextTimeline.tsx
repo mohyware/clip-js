@@ -98,7 +98,7 @@ export default function TextTimeline() {
                             }
                         }}
                         onClick={() => handleClick('text', clip.id)}
-                        className={`absolute border border-border rounded-md top-2 h-12 bg-orange-500 text-white text-sm flex items-center justify-center cursor-pointer ${activeElement === 'text' && textElements[activeElementIndex].id === clip.id ? 'bg-orange-600 border-orange-300' : ''}`}
+                        className={`absolute border border-border rounded-md top-2 h-10 bg-orange-500 text-white text-sm flex items-center justify-center cursor-pointer ${activeElement === 'text' && textElements[activeElementIndex].id === clip.id ? 'bg-orange-600 border-orange-300' : ''}`}
                         style={{
                             left: `${clip.positionStart * timelineZoom}px`,
                             width: `${(clip.positionEnd - clip.positionStart) * timelineZoom}px`,

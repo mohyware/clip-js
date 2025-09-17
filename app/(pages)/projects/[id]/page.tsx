@@ -48,6 +48,7 @@ import {
   setCurrentProject,
   updateProject,
 } from "../../../store/slices/projectsSlice";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function Project({ params }: { params: { id: string } }) {
   const playerRef = useRef<PlayerRef>(null);
@@ -330,49 +331,7 @@ export default function Project({ params }: { params: { id: string } }) {
         
         {/* Timeline Section - Resizable height */}
         <ResizablePanel defaultSize={25} minSize={15} maxSize={50}>
-          <div className="h-full border-t border-border flex overflow-hidden">
-            {/* Timeline Track Labels */}
-            <div className="w-20 flex flex-col bg-background border-r border-border shrink-0">
-              <div className="h-12 border-b border-border flex items-center justify-center bg-muted/30">
-                <span className="text-xs font-medium text-muted-foreground">Tracks</span>
-              </div>
-              
-              <div className="flex-1 flex flex-col">
-                <div className="flex-1 flex items-center justify-center border-b border-border/50">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Video className="h-4 w-4" />
-                    <span className="text-xs">Video</span>
-                  </div>
-                </div>
-
-                <div className="flex-1 flex items-center justify-center border-b border-border/50">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Music className="h-4 w-4" />
-                    <span className="text-xs">Audio</span>
-                  </div>
-                </div>
-
-                <div className="flex-1 flex items-center justify-center border-b border-border/50">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <ImageIcon className="h-4 w-4" />
-                    <span className="text-xs">Images</span>
-                  </div>
-                </div>
-
-                <div className="flex-1 flex items-center justify-center">
-                  <div className="flex items-center gap-2 text-muted-foreground">
-                    <Type className="h-4 w-4" />
-                    <span className="text-xs">Text</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            {/* Timeline Content */}
-            <div className="flex-1 overflow-hidden">
-              <Timeline />
-            </div>
-          </div>
+            <Timeline />
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

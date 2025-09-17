@@ -9,6 +9,7 @@ import {
   setTimelineZoom,
 } from "@/app/store/slices/projectSlice";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { throttle } from "lodash";
 import { Check, Copy, Scissors, Trash2, X, ZoomIn, ZoomOut } from "lucide-react";
@@ -223,10 +224,14 @@ export const Timeline = () => {
     dispatch(setCurrentTime(clampedTime));
   };
 
+  // Calculate the minimum width to match the timeline header
+  const totalSeconds = Math.max(duration + 2, 61);
+  const timelineWidth = totalSeconds * timelineZoom;
+
   return (
-    <div className="flex w-full flex-col gap-4 p-4 bg-background border rounded-lg shadow-sm">
+    <div className="flex w-full flex-col gap-1 p-1 bg-background border rounded-lg shadow-sm h-full">
       {/* Timeline Controls Header */}
-      <div className="flex flex-row items-center justify-between gap-4 w-full">
+      <div className="flex flex-row items-center justify-between gap-4 w-full shrink-0">
         {/* Action Buttons */}
         <div className="flex flex-row items-center gap-2">
           <Button
@@ -301,39 +306,50 @@ export const Timeline = () => {
 
       {/* Timeline Container */}
       <div
-        className="relative overflow-x-auto w-full border border-border bg-background rounded-md shadow-inner"
+        className="relative w-full border border-border bg-background rounded-md shadow-inner flex-1 flex flex-col min-h-0 overflow-x-auto scrollbar-hide"
         ref={timelineRef}
         onClick={handleClick}
+        style={{
+          scrollbarWidth: 'none', /* Firefox */
+          msOverflowStyle: 'none', /* IE and Edge */
+        }}
       >
         {/* Timeline Header */}
         <Header />
 
         {/* Timeline Content */}
-        <div className="bg-background relative">
-          {/* Timeline Cursor */}
-          <div
-            className="absolute top-0 bottom-0 w-0.5 bg-destructive z-50 shadow-sm"
-            style={{
-              left: `${currentTime * timelineZoom}px`,
-            }}
-          />
-          
+        <div className="bg-background relative flex-1 min-h-0">
           {/* Timeline Tracks */}
-          <div className="w-full divide-y divide-border">
-            <div className="relative h-16 hover:bg-muted/20 transition-colors">
-              <VideoTimeline />
-            </div>
+          <div className="h-full w-full relative overflow-y-auto scrollbar-hide">
+            {/* Timeline Cursor */}
+            <div
+              className="absolute top-0 bottom-0 w-0.5 bg-destructive z-50 shadow-sm pointer-events-none"
+              style={{
+                left: `${currentTime * timelineZoom}px`,
+              }}
+            />
+            
+            <div 
+              className="w-full divide-y divide-border"
+              style={{
+                minWidth: `${timelineWidth}px`,
+              }}
+            >
+              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <VideoTimeline />
+              </div>
 
-            <div className="relative h-16 hover:bg-muted/20 transition-colors">
-              <AudioTimeline />
-            </div>
+              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <AudioTimeline />
+              </div>
 
-            <div className="relative h-16 hover:bg-muted/20 transition-colors">
-              <ImageTimeline />
-            </div>
+              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <ImageTimeline />
+              </div>
 
-            <div className="relative h-16 hover:bg-muted/20 transition-colors">
-              <TextTimeline />
+              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <TextTimeline />
+              </div>
             </div>
           </div>
         </div>

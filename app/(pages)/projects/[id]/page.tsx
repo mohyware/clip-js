@@ -30,6 +30,7 @@ import AspectRatioControl from "../../../components/editor/player/AspectRatioCon
 import MediaProperties from "../../../components/editor/PropertiesSection/MediaProperties";
 import TextProperties from "../../../components/editor/PropertiesSection/TextProperties";
 import { Timeline } from "../../../components/editor/timeline/Timline";
+import ThemeSwitch from "../../../components/buttons/ThemeSwitch";
 import {
   getFile,
   getProject,
@@ -169,10 +170,10 @@ export default function Project({ params }: { params: { id: string } }) {
     <div className="flex flex-col h-screen">
       {/* Loading screen */}
       {isLoading ? (
-        <div className="fixed inset-0 flex items-center bg-black bg-opacity-50 justify-center z-50">
-          <div className="bg-black bg-opacity-70 p-6 rounded-lg flex flex-col items-center">
-            <div className="w-16 h-16 border-4 border-t-white border-r-white border-opacity-30 border-t-opacity-100 rounded-full animate-spin"></div>
-            <p className="mt-4 text-white text-lg">Loading project...</p>
+        <div className="fixed inset-0 flex items-center bg-background/80 backdrop-blur-sm justify-center z-50">
+          <div className="bg-card border rounded-lg p-6 flex flex-col items-center shadow-lg">
+            <div className="w-16 h-16 border-4 border-border border-t-primary rounded-full animate-spin"></div>
+            <p className="mt-4 text-foreground text-lg">Loading project...</p>
           </div>
         </div>
       ) : null}
@@ -245,9 +246,12 @@ export default function Project({ params }: { params: { id: string } }) {
             <PreviewPlayer /> */}
 
             <div className="h-full flex flex-col bg-background w-full">
-              <div className="h-10 border-b border-border/50 bg-muted/30 flex items-center justify-between px-3 shrink-0 gap-2">
+              <div className="h-10 border-b border-border bg-muted/30 flex items-center justify-between px-3 shrink-0 gap-2">
                 <div className="flex items-center gap-2">
                   <AspectRatioControl onDimensionChange={handleDimensionChange} />
+                </div>
+                <div className="flex items-center gap-2">
+                  <ThemeSwitch />
                 </div>
               </div>
               {/* Video preview with new container */}
@@ -258,7 +262,7 @@ export default function Project({ params }: { params: { id: string } }) {
               />
 
               {/* External Player Controls (kept outside the preview) */}
-              <div className="w-full flex items-center justify-center gap-2 py-2 px-4 border-t border-border/50 bg-background/60">
+              <div className="w-full flex items-center justify-center gap-2 py-2 px-4 border-t border-border bg-background">
                 {/* Left side controls */}
                 <div className="flex items-center gap-1">
                   <MuteButton playerRef={playerRef} />

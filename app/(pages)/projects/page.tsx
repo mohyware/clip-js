@@ -140,20 +140,20 @@ export default function Projects() {
     };
 
     return (
-        <div className="min-h-screen bg-white dark:bg-black">
+        <div className="min-h-screen bg-background">
             {/* Header Section */}
-            <div className="border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-black/80 backdrop-blur-sm sticky top-0 z-10">
+            <div className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-10">
                 <div className="max-w-7xl mx-auto px-6 py-6">
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">Projects</h1>
-                            <p className="text-gray-500 dark:text-gray-400 mt-1">
+                            <h1 className="text-3xl font-semibold text-foreground">Projects</h1>
+                            <p className="text-muted-foreground mt-1">
                                 {filteredProjects.length} {filteredProjects.length === 1 ? 'project' : 'projects'}
                             </p>
                         </div>
                         <Button 
                             onClick={() => setIsCreating(true)}
-                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100 font-medium"
+                            className="font-medium"
                         >
                             <Plus className="w-4 h-4 mr-2" />
                             New Project
@@ -163,12 +163,12 @@ export default function Projects() {
                     {/* Search Bar */}
                     <div className="mt-6 max-w-md">
                         <div className="relative">
-                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                             <Input
                                 placeholder="Search projects..."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                className="pl-10 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 focus:border-gray-400 dark:focus:border-gray-600"
+                                className="pl-10"
                             />
                         </div>
                     </div>
@@ -181,22 +181,21 @@ export default function Projects() {
                     <LoadingSkeleton />
                 ) : filteredProjects.length === 0 && searchQuery ? (
                     <div className="text-center py-12">
-                        <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center mb-4">
-                            <Search className="w-8 h-8 text-gray-400" />
+                        <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-4">
+                            <Search className="w-8 h-8 text-muted-foreground" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No projects found</h3>
-                        <p className="text-gray-500 dark:text-gray-400">Try adjusting your search to find what you're looking for.</p>
+                        <h3 className="text-lg font-medium text-foreground mb-2">No projects found</h3>
+                        <p className="text-muted-foreground">Try adjusting your search to find what you're looking for.</p>
                     </div>
                 ) : filteredProjects.length === 0 ? (
                     <div className="text-center py-12">
-                        <div className="mx-auto w-24 h-24 bg-gray-100 dark:bg-gray-900 rounded-full flex items-center justify-center mb-4">
-                            <Video className="w-8 h-8 text-gray-400" />
+                        <div className="mx-auto w-24 h-24 bg-muted rounded-full flex items-center justify-center mb-4">
+                            <Video className="w-8 h-8 text-muted-foreground" />
                         </div>
-                        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No projects yet</h3>
-                        <p className="text-gray-500 dark:text-gray-400 mb-6">Get started by creating your first video project.</p>
+                        <h3 className="text-lg font-medium text-foreground mb-2">No projects yet</h3>
+                        <p className="text-muted-foreground mb-6">Get started by creating your first video project.</p>
                         <Button 
                             onClick={() => setIsCreating(true)}
-                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
                         >
                             <Plus className="w-4 h-4 mr-2" />
                             Create Project
@@ -213,13 +212,13 @@ export default function Projects() {
                                         onClick={() => dispatch(setCurrentProject(project.id))}
                                         className="block"
                                     >
-                                        <div className="p-6 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950 rounded-lg hover:border-gray-300 dark:hover:border-gray-700 hover:shadow-sm transition-all duration-200 cursor-pointer">
+                                        <div className="p-6 border border-border bg-card rounded-lg hover:border-border/80 hover:shadow-sm transition-all duration-200 cursor-pointer">
                                             <div className="flex items-start justify-between">
                                                 <div className="min-w-0 flex-1">
-                                                    <h3 className="font-medium text-gray-900 dark:text-white truncate text-lg">
+                                                    <h3 className="font-medium text-card-foreground truncate text-lg">
                                                         {project.projectName}
                                                     </h3>
-                                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                                                    <p className="text-sm text-muted-foreground mt-2">
                                                         {getTimeAgo(project.lastModified)}
                                                     </p>
                                                 </div>
@@ -232,7 +231,7 @@ export default function Projects() {
                                                 <Button 
                                                     variant="ghost" 
                                                     size="icon"
-                                                    className="w-8 h-8 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                    className="w-8 h-8"
                                                 >
                                                     <MoreHorizontal className="w-4 h-4" />
                                                 </Button>
@@ -244,7 +243,7 @@ export default function Projects() {
                                                         e.stopPropagation();
                                                         handleDeleteProject(project.id);
                                                     }}
-                                                    className="text-red-600 focus:text-red-600"
+                                                    className="text-destructive focus:text-destructive"
                                                 >
                                                     <Trash2 className="w-4 h-4 mr-2" />
                                                     Delete
@@ -260,16 +259,16 @@ export default function Projects() {
 
             {/* Create Project Modal */}
             <Dialog open={isCreating} onOpenChange={setIsCreating}>
-                <DialogContent className="sm:max-w-md bg-white dark:bg-gray-950 border-gray-200 dark:border-gray-800">
+                <DialogContent className="sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle className="text-gray-900 dark:text-white">Create New Project</DialogTitle>
-                        <DialogDescription className="text-gray-500 dark:text-gray-400">
+                        <DialogTitle>Create New Project</DialogTitle>
+                        <DialogDescription>
                             Enter a name for your new video project.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="space-y-4 py-4">
                         <div className="space-y-2">
-                            <Label htmlFor="project-name" className="text-gray-900 dark:text-white">
+                            <Label htmlFor="project-name">
                                 Project Name
                             </Label>
                             <Input
@@ -285,7 +284,6 @@ export default function Projects() {
                                     }
                                 }}
                                 placeholder="My Video Project"
-                                className="bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-800 focus:border-gray-400 dark:focus:border-gray-600"
                             />
                         </div>
                     </div>
@@ -293,14 +291,12 @@ export default function Projects() {
                         <Button 
                             variant="outline" 
                             onClick={() => setIsCreating(false)}
-                            className="border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300"
                         >
                             Cancel
                         </Button>
                         <Button 
                             onClick={handleCreateProject}
                             disabled={!newProjectName.trim()}
-                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-100"
                         >
                             Create Project
                         </Button>

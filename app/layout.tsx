@@ -38,10 +38,12 @@ export default function RootLayout({
           <main className="flex-grow">
             <Toaster
               toastOptions={{
+                className: '',
                 style: {
-                  borderRadius: "10px",
-                  background: "#333",
-                  color: "#fff",
+                  borderRadius: "var(--radius)",
+                  background: "hsl(var(--card))",
+                  color: "hsl(var(--card-foreground))",
+                  border: "1px solid hsl(var(--border))",
                 },
               }}
             />

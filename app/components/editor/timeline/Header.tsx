@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useAppSelector } from "../../../store";
+
 export const Header = () => {
   const { duration, currentTime, timelineZoom, enableMarkerTracking } =
     useAppSelector((state) => state.projectState);
@@ -27,10 +28,11 @@ export const Header = () => {
   }, [currentTime]);
 
   return (
-    <div className="flex items-center py-2 w-full" ref={containerRef}>
-      <div className="relative h-8">
+    <div className="flex items-end py-3 w-full bg-muted/20 border-b border-border" ref={containerRef}>
+      <div className="relative h-10">
         {tickMarkers.map((marker) => {
           const isWholeSecond = Number.isInteger(marker) && marker !== 0;
+          const isMinorTick = marker % 1 === 0.5; // Half-second marks
           return (
             <div
               ref={(el) => {
@@ -44,18 +46,27 @@ export const Header = () => {
                 height: "100%",
               }}
             >
-              {/* Tick line */}
+              {/* Enhanced Tick lines */}
               <div
-                className={`w-px ${
-                  isWholeSecond ? "h-7 bg-border" : "h-2 bg-muted-foreground"
-                }`}
+                className={`
+                  w-px transition-colors duration-200
+                  ${isWholeSecond 
+                    ? "h-8 bg-border shadow-sm" 
+                    : isMinorTick 
+                      ? "h-4 bg-muted-foreground/60" 
+                      : "h-2 bg-muted-foreground/40"
+                  }
+                `}
               />
 
-              {/* second labels */}
+              {/* Modern second labels */}
               {isWholeSecond && (
-                <span className="mt-1 text-[10px] text-muted-foreground cursor-default">
-                  {marker}s
-                </span>
+                <div className="mt-1 px-1">
+                  <span className="text-[10px] font-medium text-muted-foreground cursor-default 
+                                 bg-background/80 rounded px-1 py-0.5 shadow-sm border border-border/50">
+                    {marker}s
+                  </span>
+                </div>
               )}
             </div>
           );

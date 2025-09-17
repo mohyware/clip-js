@@ -5,37 +5,32 @@ import {
 } from "@/app/components/editor/player/remotion/PlayerButton";
 import { MediaFile } from "@/app/types";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  ResizablePanelGroup,
-  ResizablePanel,
   ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { type PlayerRef } from "@remotion/player";
 import {
   Download,
   FolderOpen,
-  ImageIcon,
-  Music,
   Pause,
   Play,
-  Type,
-  Video,
+  Type
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import ThemeSwitch from "../../../components/buttons/ThemeSwitch";
 import UploadMedia from "../../../components/editor/AssetsPanel/AddButtons/UploadMedia";
 import AddText from "../../../components/editor/AssetsPanel/tools-section/AddText";
 import ExportList from "../../../components/editor/AssetsPanel/tools-section/ExportList";
 import MediaList from "../../../components/editor/AssetsPanel/tools-section/MediaList";
-import { PreviewPlayer } from "../../../components/editor/player/remotion/Player";
-import VideoPlayerContainer from "../../../components/editor/player/VideoPlayerContainer";
 import AspectRatioControl from "../../../components/editor/player/AspectRatioControl";
+import VideoPlayerContainer from "../../../components/editor/player/VideoPlayerContainer";
 import MediaProperties from "../../../components/editor/PropertiesSection/MediaProperties";
 import TextProperties from "../../../components/editor/PropertiesSection/TextProperties";
 import { Timeline } from "../../../components/editor/timeline/Timline";
-import ThemeSwitch from "../../../components/buttons/ThemeSwitch";
 import {
   getFile,
   getProject,
@@ -52,8 +47,6 @@ import {
   setCurrentProject,
   updateProject,
 } from "../../../store/slices/projectsSlice";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Skeleton } from "@/components/ui/skeleton";
 import LoadingSkeleton from "../components/loading-skeleton";
 
 export default function Project({ params }: { params: { id: string } }) {

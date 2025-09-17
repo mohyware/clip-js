@@ -13,7 +13,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { throttle } from "lodash";
 import { Check, Copy, Scissors, Trash2, X, ZoomIn, ZoomOut } from "lucide-react";
-import { memo, useMemo, useRef } from "react";
+import { memo, useMemo, useRef, useState, useCallback, useEffect } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import GlobalKeyHandlerProps from "../../../components/editor/keys/GlobalKeyHandlerProps";
@@ -36,6 +36,13 @@ export const Timeline = () => {
   } = useAppSelector((state) => state.projectState);
   const dispatch = useDispatch();
   const timelineRef = useRef<HTMLDivElement>(null);
+  const cursorRef = useRef<HTMLDivElement>(null);
+
+  // Dragging state for timeline cursor
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStartX, setDragStartX] = useState(0);
+  const [dragStartTime, setDragStartTime] = useState(0);
+  const [showTimeTooltip, setShowTimeTooltip] = useState(false);
 
   const throttledZoom = useMemo(
     () =>
@@ -210,6 +217,9 @@ export const Timeline = () => {
   };
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Prevent click handling if we're dragging
+    if (isDragging) return;
+    
     // Get the ScrollArea viewport element
     const scrollAreaViewport = e.currentTarget.querySelector('[data-radix-scroll-area-viewport]');
     if (!scrollAreaViewport) return;
@@ -225,6 +235,60 @@ export const Timeline = () => {
 
     dispatch(setCurrentTime(clampedTime));
   };
+
+  // Timeline cursor drag handlers
+  const handleCursorMouseDown = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const scrollAreaViewport = timelineRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    if (!scrollAreaViewport) return;
+
+    setIsDragging(true);
+    setDragStartX(e.clientX);
+    setDragStartTime(currentTime);
+    setShowTimeTooltip(true);
+    dispatch(setIsPlaying(false));
+    
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  }, [currentTime, dispatch]);
+
+  const handleCursorMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDragging) return;
+    
+    const scrollAreaViewport = timelineRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    if (!scrollAreaViewport) return;
+
+    const deltaX = e.clientX - dragStartX;
+    const deltaTime = deltaX / timelineZoom;
+    const newTime = dragStartTime + deltaTime;
+    const clampedTime = Math.max(0, Math.min(duration, newTime));
+
+    dispatch(setCurrentTime(clampedTime));
+  }, [isDragging, dragStartX, dragStartTime, timelineZoom, duration, dispatch]);
+
+  const handleCursorMouseUp = useCallback(() => {
+    if (!isDragging) return;
+    
+    setIsDragging(false);
+    setShowTimeTooltip(false);
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }, [isDragging]);
+
+  // Add global mouse event listeners for dragging
+  useEffect(() => {
+    if (isDragging) {
+      document.addEventListener('mousemove', handleCursorMouseMove);
+      document.addEventListener('mouseup', handleCursorMouseUp);
+      
+      return () => {
+        document.removeEventListener('mousemove', handleCursorMouseMove);
+        document.removeEventListener('mouseup', handleCursorMouseUp);
+      };
+    }
+  }, [isDragging, handleCursorMouseMove, handleCursorMouseUp]);
 
   // Calculate the minimum width to match the timeline header
   const totalSeconds = Math.max(duration + 2, 61);
@@ -321,31 +385,100 @@ export const Timeline = () => {
             <div className="relative h-full w-full">
               {/* Timeline Cursor */}
               <div
-                className="absolute top-0 bottom-0 w-0.5 bg-destructive z-50 shadow-sm pointer-events-none"
+                ref={cursorRef}
+                className="absolute top-0 bottom-0 z-50 flex flex-col items-center pointer-events-none "
                 style={{
                   left: `${currentTime * timelineZoom}px`,
+                  transform: 'translateX(-50%)',
                 }}
-              />
+              >
+                {/* Draggable Handle */}
+                <div
+                  className={`
+                    w-4 h-6 rounded-full shadow-lg pointer-events-auto bg-destructive cursor-col-resize
+                    transition-all duration-200 ease-out
+                    ${isDragging 
+                      ? 'bg-destructive scale-110 shadow-xl' 
+                      : 'bg-destructive hover:scale-105 hover:shadow-lg'
+                    }
+                    border-2 border-background
+                    relative group
+                  `}
+                  onMouseDown={handleCursorMouseDown}
+                  onMouseEnter={() => setShowTimeTooltip(true)}
+                  onMouseLeave={() => !isDragging && setShowTimeTooltip(false)}
+                >
+                  {/* Handle grip lines */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center">
+                    <div className="w-1 h-0.5 bg-background/60 rounded-full mb-0.5"></div>
+                    <div className="w-1 h-0.5 bg-background/60 rounded-full mb-0.5"></div>
+                    <div className="w-1 h-0.5 bg-background/60 rounded-full"></div>
+                  </div>
+                  
+                  {/* Time Tooltip */}
+                  {showTimeTooltip && (
+                    <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 pointer-events-none">
+                      <div className="bg-popover border border-border rounded-md px-2 py-1 shadow-lg">
+                        <span className="text-xs font-mono text-popover-foreground">
+                          {Math.floor(currentTime / 60)}:{(currentTime % 60).toFixed(1).padStart(4, '0')}
+                        </span>
+                      </div>
+                      {/* Tooltip arrow */}
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-border"></div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Cursor Line */}
+                <div className={`
+                  w-0.5 flex-1 transition-all duration-200
+                  ${isDragging 
+                    ? 'bg-destructive shadow-sm' 
+                    : 'bg-destructive'
+                  }
+                `} />
+                
+                {/* Bottom indicator */}
+                <div className={`
+                  w-2 h-2 rounded-full transition-all duration-200
+                  ${isDragging 
+                    ? 'bg-destructive scale-110' 
+                    : 'bg-destructive'
+                  }
+                `} />
+              </div>
               
               <div 
-                className="w-full divide-y divide-border"
+                className="w-full divide-y divide-border/50"
                 style={{
                   minWidth: `${timelineWidth}px`,
                 }}
               >
-                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <div className="relative h-12 hover:bg-muted/30 transition-all duration-200 w-full border-l-2 border-l-blue-500/20">
+                  <div className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs font-medium text-muted-foreground">
+                    Video
+                  </div>
                   <VideoTimeline />
                 </div>
 
-                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <div className="relative h-12 hover:bg-muted/30 transition-all duration-200 w-full border-l-2 border-l-green-500/20">
+                  <div className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs font-medium text-muted-foreground">
+                    Audio
+                  </div>
                   <AudioTimeline />
                 </div>
 
-                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <div className="relative h-12 hover:bg-muted/30 transition-all duration-200 w-full border-l-2 border-l-purple-500/20">
+                  <div className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs font-medium text-muted-foreground">
+                    Images
+                  </div>
                   <ImageTimeline />
                 </div>
 
-                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                <div className="relative h-12 hover:bg-muted/30 transition-all duration-200 w-full border-l-2 border-l-orange-500/20">
+                  <div className="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs font-medium text-muted-foreground">
+                    Text
+                  </div>
                   <TextTimeline />
                 </div>
               </div>

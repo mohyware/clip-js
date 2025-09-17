@@ -262,8 +262,8 @@ export default function Project({ params }: { params: { id: string } }) {
                 </div>
                 
                 {/* Video Container - Takes remaining space */}
-                <div className="flex-1 flex flex-col bg-background min-h-0">
-                  <div className="flex-1 overflow-hidden">
+                <div className="flex-1 flex flex-col bg-background min-h-0 overflow-hidden">
+                  <div className="flex-1 min-h-0 overflow-hidden">
                     <VideoPlayerContainer
                       playerRef={playerRef}
                       compositionWidth={width}
@@ -331,7 +331,9 @@ export default function Project({ params }: { params: { id: string } }) {
         
         {/* Timeline Section - Resizable height */}
         <ResizablePanel defaultSize={25} minSize={15} maxSize={50}>
+          <div className="h-full overflow-hidden">
             <Timeline />
+          </div>
         </ResizablePanel>
       </ResizablePanelGroup>
     </div>

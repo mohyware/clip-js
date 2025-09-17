@@ -9,7 +9,7 @@ import {
   setTimelineZoom,
 } from "@/app/store/slices/projectSlice";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Slider } from "@/components/ui/slider";
 import { throttle } from "lodash";
 import { Check, Copy, Scissors, Trash2, X, ZoomIn, ZoomOut } from "lucide-react";
@@ -210,12 +210,14 @@ export const Timeline = () => {
   };
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!timelineRef.current) return;
+    // Get the ScrollArea viewport element
+    const scrollAreaViewport = e.currentTarget.querySelector('[data-radix-scroll-area-viewport]');
+    if (!scrollAreaViewport) return;
 
     dispatch(setIsPlaying(false));
-    const rect = timelineRef.current.getBoundingClientRect();
+    const rect = scrollAreaViewport.getBoundingClientRect();
 
-    const scrollOffset = timelineRef.current.scrollLeft;
+    const scrollOffset = scrollAreaViewport.scrollLeft;
     const offsetX = e.clientX - rect.left + scrollOffset;
 
     const seconds = offsetX / timelineZoom;
@@ -306,52 +308,51 @@ export const Timeline = () => {
 
       {/* Timeline Container */}
       <div
-        className="relative w-full border border-border bg-background rounded-md shadow-inner flex-1 flex flex-col min-h-0 overflow-x-auto scrollbar-hide"
+        className="relative w-full border border-border bg-background rounded-md shadow-inner flex-1 flex flex-col min-h-0"
         ref={timelineRef}
-        onClick={handleClick}
-        style={{
-          scrollbarWidth: 'none', /* Firefox */
-          msOverflowStyle: 'none', /* IE and Edge */
-        }}
       >
         {/* Timeline Header */}
         <Header />
 
         {/* Timeline Content */}
-        <div className="bg-background relative flex-1 min-h-0">
+        <div className="bg-background relative flex-1 min-h-0" onClick={handleClick}>
           {/* Timeline Tracks */}
-          <div className="h-full w-full relative overflow-y-auto scrollbar-hide">
-            {/* Timeline Cursor */}
-            <div
-              className="absolute top-0 bottom-0 w-0.5 bg-destructive z-50 shadow-sm pointer-events-none"
-              style={{
-                left: `${currentTime * timelineZoom}px`,
-              }}
-            />
-            
-            <div 
-              className="w-full divide-y divide-border"
-              style={{
-                minWidth: `${timelineWidth}px`,
-              }}
-            >
-              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
-                <VideoTimeline />
-              </div>
+          <ScrollArea className="h-full w-full mb-4">
+            <div className="relative h-full w-full">
+              {/* Timeline Cursor */}
+              <div
+                className="absolute top-0 bottom-0 w-0.5 bg-destructive z-50 shadow-sm pointer-events-none"
+                style={{
+                  left: `${currentTime * timelineZoom}px`,
+                }}
+              />
+              
+              <div 
+                className="w-full divide-y divide-border"
+                style={{
+                  minWidth: `${timelineWidth}px`,
+                }}
+              >
+                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                  <VideoTimeline />
+                </div>
 
-              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
-                <AudioTimeline />
-              </div>
+                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                  <AudioTimeline />
+                </div>
 
-              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
-                <ImageTimeline />
-              </div>
+                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                  <ImageTimeline />
+                </div>
 
-              <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
-                <TextTimeline />
+                <div className="relative h-12 hover:bg-muted/20 transition-colors w-full">
+                  <TextTimeline />
+                </div>
               </div>
             </div>
-          </div>
+            <ScrollBar orientation="horizontal" />
+            <ScrollBar orientation="vertical" />
+          </ScrollArea>
         </div>
       </div>
       

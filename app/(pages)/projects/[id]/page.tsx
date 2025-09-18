@@ -312,22 +312,12 @@ export default function Project({ params }: { params: { id: string } }) {
 
                 {/* Right Sidebar - Element Properties */}
                 <ResizablePanel defaultSize={22} minSize={15} maxSize={35}>
-                  <div className="h-full border-l border-border overflow-y-auto p-4">
+                  <div className="h-full border-l border-border overflow-y-auto">
                     {activeElement === "media" && (
-                      <div className="space-y-4">
-                        <h2 className="text-lg font-semibold">
-                          Media Properties
-                        </h2>
-                        <MediaProperties />
-                      </div>
+                      <MediaProperties />
                     )}
                     {activeElement === "text" && (
-                      <div className="space-y-4">
-                        <h2 className="text-lg font-semibold">
-                          Text Properties
-                        </h2>
-                        <TextProperties />
-                      </div>
+                      <TextProperties />
                     )}
                     {!activeElement && (
                       <div className="flex items-center justify-center h-full text-muted-foreground">

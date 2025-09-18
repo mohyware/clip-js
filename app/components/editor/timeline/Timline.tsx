@@ -300,7 +300,7 @@ export const Timeline = () => {
       <div className="flex flex-row items-center justify-between gap-4 w-full shrink-0">
         {/* Action Buttons */}
         <div className="flex flex-row items-center gap-2">
-          <Button
+          {/* <Button
             onClick={() => dispatch(setMarkerTrack(!enableMarkerTracking))}
             variant={enableMarkerTracking ? "default" : "outline"}
             size="sm"
@@ -313,7 +313,7 @@ export const Timeline = () => {
             )}
             Track Marker
             <span className="text-xs opacity-60">(T)</span>
-          </Button>
+          </Button> */}
 
           <Button
             onClick={handleSplit}

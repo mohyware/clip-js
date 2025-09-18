@@ -89,20 +89,20 @@ export default function AddTextButton() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-6">
-        <Type className="h-5 w-5 text-primary" />
-        <h2 className="text-lg font-semibold ">Add Text Element</h2>
+      <div className="flex items-center gap-2">
+        <Type className="h-4 w-4 text-primary" />
+        <h2 className="text-base font-semibold">Add Text Element</h2>
       </div>
 
-      <ScrollArea className="h-[500px] px-4 ">
-        <div className="space-y-6 px-1">
+      <ScrollArea className="h-[450px] px-4">
+        <div className="space-y-3">
           {/* Text Content Section */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Type className="h-4 w-4 text-muted-foreground" />
-              <Label htmlFor="text-content" className="text-sm font-medium">Content</Label>
+              <Type className="h-3 w-3 text-muted-foreground" />
+              <Label htmlFor="text-content" className="text-xs font-medium">Content</Label>
             </div>
             <Textarea
               id="text-content"
@@ -111,21 +111,21 @@ export default function AddTextButton() {
               onChange={(e) =>
                 setTextConfig({ ...textConfig, text: e.target.value })
               }
-              className="min-h-[80px] resize-none"
+              className="min-h-[60px] resize-none"
             />
           </div>
 
           <Separator />
 
           {/* Timing Section */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Timing</Label>
+              <Clock className="h-3 w-3 text-muted-foreground" />
+              <Label className="text-xs font-medium">Timing</Label>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="start-time" className="text-xs text-muted-foreground">Start Time (s)</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label htmlFor="start-time" className="text-xs text-muted-foreground">Start (s)</Label>
                 <Input
                   id="start-time"
                   type="number"
@@ -140,8 +140,8 @@ export default function AddTextButton() {
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="end-time" className="text-xs text-muted-foreground">End Time (s)</Label>
+              <div className="space-y-1">
+                <Label htmlFor="end-time" className="text-xs text-muted-foreground">End (s)</Label>
                 <Input
                   id="end-time"
                   type="number"
@@ -162,14 +162,14 @@ export default function AddTextButton() {
           <Separator />
 
           {/* Position Section */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Move className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Position</Label>
+              <Move className="h-3 w-3 text-muted-foreground" />
+              <Label className="text-xs font-medium">Position</Label>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="x-position" className="text-xs text-muted-foreground">X Position (px)</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label htmlFor="x-position" className="text-xs text-muted-foreground">X (px)</Label>
                 <Input
                   id="x-position"
                   type="number"
@@ -182,8 +182,8 @@ export default function AddTextButton() {
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="y-position" className="text-xs text-muted-foreground">Y Position (px)</Label>
+              <div className="space-y-1">
+                <Label htmlFor="y-position" className="text-xs text-muted-foreground">Y (px)</Label>
                 <Input
                   id="y-position"
                   type="number"
@@ -202,14 +202,14 @@ export default function AddTextButton() {
           <Separator />
 
           {/* Typography Section */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Settings className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Typography</Label>
+              <Settings className="h-3 w-3 text-muted-foreground" />
+              <Label className="text-xs font-medium">Typography</Label>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-2">
-                <Label htmlFor="font-family" className="text-xs text-muted-foreground">Font Family</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
+                <Label htmlFor="font-family" className="text-xs text-muted-foreground">Font</Label>
                 <Select
                   value={textConfig.font || "Arial"}
                   onValueChange={(value) =>
@@ -228,8 +228,8 @@ export default function AddTextButton() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="font-size" className="text-xs text-muted-foreground">Font Size (px)</Label>
+              <div className="space-y-1">
+                <Label htmlFor="font-size" className="text-xs text-muted-foreground">Size (px)</Label>
                 <Input
                   id="font-size"
                   type="number"
@@ -250,13 +250,13 @@ export default function AddTextButton() {
           <Separator />
 
           {/* Styling Section */}
-          <div className="space-y-3">
+          <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Palette className="h-4 w-4 text-muted-foreground" />
-              <Label className="text-sm font-medium">Styling</Label>
+              <Palette className="h-3 w-3 text-muted-foreground" />
+              <Label className="text-xs font-medium">Styling</Label>
             </div>
-            <div className="space-y-3">
-              <div className="space-y-2">
+            <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="text-color" className="text-xs text-muted-foreground">Text Color</Label>
                 <div className="flex items-center gap-2">
                   <input
@@ -266,7 +266,7 @@ export default function AddTextButton() {
                     onChange={(e) =>
                       setTextConfig({ ...textConfig, color: e.target.value })
                     }
-                    className="w-12 h-10 rounded-md border border-input bg-background cursor-pointer"
+                    className="w-10 h-8 rounded border border-input cursor-pointer"
                   />
                   <Input
                     type="text"
@@ -274,11 +274,11 @@ export default function AddTextButton() {
                     onChange={(e) =>
                       setTextConfig({ ...textConfig, color: e.target.value })
                     }
-                    className="flex-1 font-mono text-sm"
+                    className="flex-1 font-mono text-xs"
                   />
                 </div>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="z-index" className="text-xs text-muted-foreground">Layer (Z-Index)</Label>
                 <Input
                   id="z-index"
@@ -299,11 +299,10 @@ export default function AddTextButton() {
       </ScrollArea>
 
       {/* Action Button */}
-      <div className="pt-4 border-t">
-        <Button 
-          onClick={handleAddText} 
+      <div className="pt-2 border-t">
+        <Button
+          onClick={handleAddText}
           className="w-full"
-          size="lg"
         >
           <Type className="w-4 h-4 mr-2" />
           Add Text Element

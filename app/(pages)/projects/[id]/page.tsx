@@ -17,6 +17,7 @@ import {
   FolderOpen,
   Pause,
   Play,
+  RotateCcw,
   Type
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -62,6 +63,15 @@ export default function Project({ params }: { params: { id: string } }) {
         player.play();
         setIsPlaying(true);
       }
+    }
+  }, []);
+
+  const startOver = useCallback(() => {
+    const player = playerRef.current;
+    if (player) {
+      player.pause();
+      player.seekTo(0);
+      setIsPlaying(false);
     }
   }, []);
   const { id } = params;
@@ -171,7 +181,7 @@ export default function Project({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-screen flex flex-col overflow-hidden dark:bg-black bg-white">
       {/* Modern Skeleton Loading Screen */}
       {isLoading ? (
         <LoadingSkeleton />
@@ -285,7 +295,17 @@ export default function Project({ params }: { params: { id: string } }) {
                           <MuteButton playerRef={playerRef} />
                         </div>
 
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-1">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={startOver}
+                            className="h-8 px-3"
+                            title="Start Over"
+                          >
+                            <RotateCcw className="h-4 w-4" />
+                          </Button>
+                          
                           <Button
                             variant="ghost"
                             size="sm"

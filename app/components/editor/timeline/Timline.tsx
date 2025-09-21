@@ -37,6 +37,7 @@ export const Timeline = () => {
   const dispatch = useDispatch();
   const timelineRef = useRef<HTMLDivElement>(null);
   const cursorRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   // Dragging state for timeline cursor
   const [isDragging, setIsDragging] = useState(false);
@@ -290,6 +291,36 @@ export const Timeline = () => {
     }
   }, [isDragging, handleCursorMouseMove, handleCursorMouseUp]);
 
+  // Auto-scroll timeline to keep playhead in view when playing
+  useEffect(() => {
+    if (!enableMarkerTracking || !isPlaying) return;
+    
+    const scrollAreaViewport = scrollAreaRef.current?.querySelector('[data-radix-scroll-area-viewport]');
+    if (!scrollAreaViewport) return;
+
+    const cursorPosition = currentTime * timelineZoom;
+    const viewportWidth = scrollAreaViewport.clientWidth;
+    const scrollLeft = scrollAreaViewport.scrollLeft;
+    const scrollRight = scrollLeft + viewportWidth;
+
+    // Check if cursor is outside the visible area
+    const margin = 100; // pixels of margin to keep cursor away from edges
+    
+    if (cursorPosition < scrollLeft + margin) {
+      // Cursor is too far left, scroll left
+      scrollAreaViewport.scrollTo({
+        left: Math.max(0, cursorPosition - viewportWidth / 2),
+        behavior: 'smooth'
+      });
+    } else if (cursorPosition > scrollRight - margin) {
+      // Cursor is too far right, scroll right
+      scrollAreaViewport.scrollTo({
+        left: cursorPosition - viewportWidth / 2,
+        behavior: 'smooth'
+      });
+    }
+  }, [currentTime, timelineZoom, enableMarkerTracking, isPlaying]);
+
   // Calculate the minimum width to match the timeline header
   const totalSeconds = Math.max(duration + 2, 61);
   const timelineWidth = totalSeconds * timelineZoom;
@@ -300,7 +331,7 @@ export const Timeline = () => {
       <div className="flex flex-row items-center justify-between gap-4 w-full shrink-0">
         {/* Action Buttons */}
         <div className="flex flex-row items-center gap-2">
-          {/* <Button
+          <Button
             onClick={() => dispatch(setMarkerTrack(!enableMarkerTracking))}
             variant={enableMarkerTracking ? "default" : "outline"}
             size="sm"
@@ -313,7 +344,7 @@ export const Timeline = () => {
             )}
             Track Marker
             <span className="text-xs opacity-60">(T)</span>
-          </Button> */}
+          </Button>
 
           <Button
             onClick={handleSplit}
@@ -381,7 +412,7 @@ export const Timeline = () => {
         {/* Timeline Content */}
         <div className="bg-background relative flex-1 min-h-0" onClick={handleClick}>
           {/* Timeline Tracks */}
-          <ScrollArea className="h-full w-full mb-4">
+          <ScrollArea ref={scrollAreaRef} className="h-full w-full mb-4">
             <div className="relative h-full w-full">
               {/* Timeline Cursor */}
               <div

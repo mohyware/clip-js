@@ -457,16 +457,18 @@ export default function FfmpegRender({
                     <FfmpegProgressBar ffmpeg={ffmpeg} />
                   </div>
 
-                  {/* Log Output */}
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium">Processing Log</label>
-                    <div className="bg-muted/50 border rounded-lg p-4 h-32 overflow-auto font-mono text-xs">
-                      <div className="whitespace-pre-wrap">{logMessages}</div>
+                  {/* Log Output - Only show in development */}
+                  {process.env.NODE_ENV === 'development' && (
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Processing Log</label>
+                      <div className="bg-muted/50 border rounded-lg p-4 h-32 overflow-auto font-mono text-xs">
+                        <div className="whitespace-pre-wrap">{logMessages}</div>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        ⚠️ Progress indication is experimental with FFmpeg WASM and may appear slower than actual processing
+                      </p>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      ⚠️ Progress indication is experimental with FFmpeg WASM and may appear slower than actual processing
-                    </p>
-                  </div>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-6">

@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useAppSelector } from "../../../store";
 
 export const Header = () => {
-  const { duration, currentTime, timelineZoom, enableMarkerTracking } =
+  const { duration, currentTime, timelineZoom } =
     useAppSelector((state) => state.projectState);
   const secondInterval = 0.2; // Every 0.2s
   const totalSeconds = Math.max(duration + 2, 61);
@@ -11,33 +11,14 @@ export const Header = () => {
     (_, i) => i * secondInterval
   );
 
-  // to track the marker when time changes
-  const markerRefs = useRef<HTMLDivElement[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const roundedTime = Math.floor(currentTime);
-    const el = markerRefs.current[roundedTime];
-    if (el && el.scrollIntoView && enableMarkerTracking) {
-      el.scrollIntoView({
-        behavior: "smooth",
-        inline: "center",
-        block: "nearest",
-      });
-    }
-  }, [currentTime]);
-
   return (
-    <div className="flex items-end py-3 w-full bg-muted/20 border-b border-border" ref={containerRef}>
+    <div className="flex items-end py-3 w-full bg-muted/20 border-b border-border">
       <div className="relative h-10">
         {tickMarkers.map((marker) => {
           const isWholeSecond = Number.isInteger(marker) && marker !== 0;
           const isMinorTick = marker % 1 === 0.5; // Half-second marks
           return (
             <div
-              ref={(el) => {
-                if (el) markerRefs.current[marker] = el;
-              }}
               key={marker}
               className="absolute flex flex-col items-center"
               style={{

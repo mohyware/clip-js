@@ -105,14 +105,19 @@ export default function Home() {
       />
       
       <div className="min-h-screen">
-        {/* Hero Section */}
+        {/* Hero + Intro + How it Works Section */}
         <section className="relative overflow-hidden to-muted/20">
           <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
           <div className="relative mx-auto max-w-7xl sm:px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32">
             <div className="text-center">
-              <Badge variant="secondary" className="mb-6 px-4 py-2">
-                ✨ Now supporting 1080p exports
-              </Badge>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+                <Badge variant="secondary" className="px-4 py-2">
+                  ✨ Now supporting 1080p exports
+                </Badge>
+                <Badge variant="outline" className="px-3 py-1 text-xs font-medium border-orange-200 bg-orange-50 text-orange-700 dark:border-orange-800 dark:bg-orange-950 dark:text-orange-300">
+                   Beta Version
+                </Badge>
+              </div>
               
               <h1 className="mx-auto max-w-4xl text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                 Professional video editing
@@ -124,6 +129,9 @@ export default function Home() {
               <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
                 Create stunning videos with our powerful timeline editor. No downloads, 
                 no accounts, no watermarks. Just pure creative freedom.
+                <span className="block mt-2 text-sm text-orange-600 dark:text-orange-400">
+                  Currently in beta - help us improve by sharing your feedback!
+                </span>
               </p>
               
               <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -136,66 +144,49 @@ export default function Home() {
                 </Button>
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Stats Section */}
-        {/* <section className="border-t bg-muted/30 py-12">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-              {stats.map((stat, index) => (
-                <div key={index} className="text-center">
-                  <stat.icon className="mx-auto h-6 w-6 text-primary mb-2" />
-                  <div className="text-2xl font-bold">{stat.value}</div>
-                  <div className="text-xs text-muted-foreground">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section> */}
-
-        {/* How it Works Section */}
-        <section className="py-16">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl font-bold sm:text-3xl lg:text-4xl">
-                Edit videos in three simple steps
-              </h2>
-              <p className="mt-4 text-base text-muted-foreground max-w-2xl mx-auto">
-                Our intuitive interface makes professional video editing accessible to everyone
-              </p>
-            </div>
-            
-            <div className="grid gap-8 md:grid-cols-3">
-              <article className="text-center group">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
-                  <Upload className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">1. Upload Media</h3>
-                <p className="text-sm text-muted-foreground">
-                  Drag and drop your videos, images, and audio files. Support for all major formats.
+            {/* Edit videos in three steps moved into first section */}
+            <div className="mt-16">
+              <div className="text-center mb-12">
+                <h2 className="text-2xl font-bold sm:text-3xl lg:text-4xl">
+                  Edit videos in three simple steps
+                </h2>
+                <p className="mt-4 text-base text-muted-foreground max-w-2xl mx-auto">
+                  Our intuitive interface makes professional video editing accessible to everyone
                 </p>
-              </article>
+              </div>
               
-              <article className="text-center group">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
-                  <Edit3 className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">2. Edit Timeline</h3>
-                <p className="text-sm text-muted-foreground">
-                  Use our powerful timeline to trim, arrange, and perfect your content with precision.
-                </p>
-              </article>
-              
-              <article className="text-center group">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
-                  <Download className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">3. Export & Share</h3>
-                <p className="text-sm text-muted-foreground">
-                  Export in high quality up to 1080p or share directly to your favorite platforms.
-                </p>
-              </article>
+              <div className="grid gap-8 md:grid-cols-3">
+                <article className="text-center group">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
+                    <Upload className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">1. Upload Media</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Drag and drop your videos, images, and audio files. Support for all major formats.
+                  </p>
+                </article>
+                
+                <article className="text-center group">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
+                    <Edit3 className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">2. Edit Timeline</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Use our powerful timeline to trim, arrange, and perfect your content with precision.
+                  </p>
+                </article>
+                
+                <article className="text-center group">
+                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground group-hover:scale-110 transition-transform">
+                    <Download className="h-6 w-6" />
+                  </div>
+                  <h3 className="text-lg font-semibold mb-2">3. Export & Share</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Export in high quality up to 1080p or share directly to your favorite platforms.
+                  </p>
+                </article>
+              </div>
             </div>
           </div>
         </section>

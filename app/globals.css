@@ -45,6 +45,8 @@
         --sidebar-accent-foreground: 240 5.9% 10%;
         --sidebar-border: 220 13% 91%;
         --sidebar-ring: 217.2 91.2% 59.8%;
+        --grid-color-primary: rgba(0, 0, 0, 0.03);
+        --grid-color-secondary: rgba(0, 0, 0, 0.01);
     }
   .dark {
         --background: 0 0% 3.9%;
@@ -80,6 +82,8 @@
         --sidebar-accent-foreground: 240 4.8% 95.9%;
         --sidebar-border: 240 3.7% 15.9%;
         --sidebar-ring: 217.2 91.2% 59.8%;
+        --grid-color-primary: rgba(255, 255, 255, 0.03);
+        --grid-color-secondary: rgba(255, 255, 255, 0.01);
     }
 }
 
@@ -125,5 +129,15 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;  /* Chrome, Safari and Opera */
+  }
+  
+  /* Grid background utility */
+  .grid-background {
+    background-image:
+      linear-gradient(90deg, var(--grid-color-primary) 1px, transparent 1px),
+      linear-gradient(180deg, var(--grid-color-primary) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color-secondary) 1px, transparent 1px),
+      linear-gradient(180deg, var(--grid-color-secondary) 1px, transparent 1px);
+    background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
   }
 }

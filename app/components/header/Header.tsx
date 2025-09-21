@@ -19,7 +19,7 @@ export default function Header() {
   }
 
   return (
-    <header className="border-b shadow-sm">
+    <header className="border-b shadow-sm bg-muted/20 border-border z-10">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <div className="flex items-center">
           <Link href="/" className="text-3xl dark:text-gray-100 font-bold">
@@ -41,13 +41,6 @@ export default function Header() {
                 <Link href="/projects" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                     Projects
-                  </NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link href="/about" legacyBehavior passHref>
-                  <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    About Me
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>

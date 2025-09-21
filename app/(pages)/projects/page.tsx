@@ -324,7 +324,8 @@ export default function Projects() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {visibleProjects.map((project) => (
                             <div key={project.id} className="group relative">
-                                <div
+                                <Link
+                                    href={`/projects/${project.id}`}
                                     onClick={() => dispatch(setCurrentProject(project.id))}
                                     className="block"
                                 >
@@ -341,7 +342,7 @@ export default function Projects() {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </Link>
 
                                 <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <DropdownMenu>

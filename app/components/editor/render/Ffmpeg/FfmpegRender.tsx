@@ -303,120 +303,214 @@ export default function FfmpegRender({
   };
 
   return (
-    <div className="space-y-4">
-      {/* Export Status */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          {mediaFiles.length === 0 && textElements.length === 0 ? (
-            <Badge variant="secondary">No content to export</Badge>
-          ) : loadFfmpeg ? (
-            <Badge variant="default">Ready to export</Badge>
-          ) : (
-            <Badge variant="outline">Loading FFmpeg...</Badge>
-          )}
+    <div className="space-y-6">
+      {/* Export Overview Card */}
+      <div className="rounded-lg border bg-background/50 backdrop-blur-sm p-4 space-y-4">
+        {/* Status Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+              <Download className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <h3 className="font-semibold">Export Video</h3>
+              <p className="text-sm text-muted-foreground">
+                {loadFfmpeg ? "Ready to render your project" : "Preparing export engine..."}
+              </p>
+            </div>
+          </div>
+          
+          {/* Status Badge */}
+          <div className="flex items-center gap-2">
+            {mediaFiles.length === 0 && textElements.length === 0 ? (
+              <Badge variant="secondary" className="gap-1">
+                <div className="h-2 w-2 rounded-full bg-muted-foreground/50" />
+                No content
+              </Badge>
+            ) : loadFfmpeg ? (
+              <Badge variant="default" className="gap-1">
+                <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse" />
+                Ready
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="gap-1">
+                <Loader2 className="h-3 w-3 animate-spin" />
+                Loading
+              </Badge>
+            )}
+          </div>
         </div>
+
+        {/* Content Summary */}
         {(mediaFiles.length > 0 || textElements.length > 0) && (
-          <span className="text-xs text-muted-foreground">
-            {mediaFiles.length} media file{mediaFiles.length !== 1 ? "s" : ""} +{" "}
-            {textElements.length} text element
-            {textElements.length !== 1 ? "s" : ""}
-          </span>
+          <div className="flex items-center gap-4 p-3 rounded-md bg-muted/30">
+            <div className="flex items-center gap-2">
+              <Play className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm font-medium">{mediaFiles.length}</span>
+              <span className="text-xs text-muted-foreground">
+                media file{mediaFiles.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+            <div className="h-4 w-px bg-border" />
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-mono">T</span>
+              <span className="text-sm font-medium">{textElements.length}</span>
+              <span className="text-xs text-muted-foreground">
+                text element{textElements.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+          </div>
         )}
+
+        {/* Export Button */}
+        <Button
+          onClick={() => render()}
+          className="w-full h-12"
+          size="lg"
+          disabled={
+            !loadFfmpeg ||
+            isRendering ||
+            (mediaFiles.length === 0 && textElements.length === 0)
+          }
+        >
+          {!loadFfmpeg ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Loading FFmpeg Engine...
+            </>
+          ) : isRendering ? (
+            <>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              Rendering Video...
+            </>
+          ) : (
+            <>
+              <Download className="w-4 h-4 mr-2" />
+              Start Export
+            </>
+          )}
+        </Button>
       </div>
 
-      {/* Export Button */}
-      <Button
-        onClick={() => render()}
-        className="w-full"
-        size="lg"
-        disabled={
-          !loadFfmpeg ||
-          isRendering ||
-          (mediaFiles.length === 0 && textElements.length === 0)
-        }
-      >
-        {!loadFfmpeg || isRendering ? (
-          <>
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            {loadFfmpeg ? "Rendering..." : "Loading FFmpeg..."}
-          </>
-        ) : (
-          <>
-            <Download className="w-4 h-4 mr-2" />
-            Export Video
-          </>
-        )}
-      </Button>
-
-      {/* Export Tips */}
+      {/* Empty State */}
       {mediaFiles.length === 0 && textElements.length === 0 && (
-        <div className="text-center py-4 px-4 bg-muted/50 rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            Add media files or text elements to your timeline to enable export
+        <div className="text-center py-8 px-4 rounded-lg border border-dashed bg-muted/20">
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted/50">
+            <Play className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <h4 className="font-medium mb-2">No content to export</h4>
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+            Add media files or text elements to your timeline to start creating your video
           </p>
         </div>
       )}
 
       {/* Render Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]">
-          <div className="bg-black rounded-xl shadow-lg p-6 max-w-xl w-full">
-            {/* Title and close button */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">
-                {isRendering ? "Rendering..." : `${projectName}`}
-              </h2>
-              <button
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4">
+          <div className="bg-background rounded-2xl shadow-2xl border max-w-2xl w-full max-h-[90vh] overflow-hidden">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                  {isRendering ? (
+                    <Loader2 className="h-5 w-5 text-primary animate-spin" />
+                  ) : (
+                    <Play className="h-5 w-5 text-primary" />
+                  )}
+                </div>
+                <div>
+                  <h2 className="text-xl font-semibold">
+                    {isRendering ? "Rendering Video" : "Export Complete"}
+                  </h2>
+                  <p className="text-sm text-muted-foreground">
+                    {isRendering ? "Processing your project..." : projectName}
+                  </p>
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleCloseModal}
-                className="text-white text-4xl font-bold hover:text-red-400"
-                aria-label="Close"
+                className="text-muted-foreground hover:text-foreground"
               >
-                &times;
-              </button>
+                <span className="sr-only">Close</span>
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </Button>
             </div>
 
-            {isRendering ? (
-              <div>
-                <div className="bg-background border border-border p-2 h-40 text-sm font-mono rounded">
-                  <div>{logMessages}</div>
-                  <p className="text-xs text-muted-foreground italic">
-                    The progress bar is experimental in FFmpeg WASM, so it might
-                    appear slow or unresponsive even though the actual
-                    processing is not.
-                  </p>
-                  <FfmpegProgressBar ffmpeg={ffmpeg} />
+            {/* Content */}
+            <div className="p-6">
+              {isRendering ? (
+                <div className="space-y-6">
+                  {/* Progress Section */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Processing timeline</span>
+                      <Badge variant="outline" className="gap-1">
+                        <div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
+                        In Progress
+                      </Badge>
+                    </div>
+                    <FfmpegProgressBar ffmpeg={ffmpeg} />
+                  </div>
+
+                  {/* Log Output */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Processing Log</label>
+                    <div className="bg-muted/50 border rounded-lg p-4 h-32 overflow-auto font-mono text-xs">
+                      <div className="whitespace-pre-wrap">{logMessages}</div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      ⚠️ Progress indication is experimental with FFmpeg WASM and may appear slower than actual processing
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div>
-                {previewUrl && (
-                  <video src={previewUrl} controls className="w-full mb-4" />
-                )}
-                <div className="flex gap-3">
-                  <Button
-                    asChild
-                    variant="default"
-                    size="lg"
-                    className="flex-1"
-                  >
-                    <a href={previewUrl || "#"} download={`${projectName}.mp4`}>
-                      <Save className="w-4 h-4 mr-2" />
-                      Download Video
-                    </a>
-                  </Button>
-                  <Button asChild variant="outline" size="lg">
-                    <a
-                      href="https://github.com/sponsors/mohyware"
-                      target="_blank"
-                      rel="noopener noreferrer"
+              ) : (
+                <div className="space-y-6">
+                  {/* Video Preview */}
+                  {previewUrl && (
+                    <div className="space-y-3">
+                      <label className="text-sm font-medium">Preview</label>
+                      <div className="relative rounded-lg overflow-hidden border bg-black">
+                        <video 
+                          src={previewUrl} 
+                          controls 
+                          className="w-full aspect-video"
+                          preload="metadata"
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Action Buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button
+                      asChild
+                      size="lg"
+                      className="flex-1"
                     >
-                      <Heart className="w-4 h-4 mr-2" />
-                      Sponsor
-                    </a>
-                  </Button>
+                      <a href={previewUrl || "#"} download={`${projectName}.mp4`}>
+                        <Save className="w-4 h-4 mr-2" />
+                        Download Video
+                      </a>
+                    </Button>
+                    <Button asChild variant="outline" size="lg" className="sm:w-auto">
+                      <a
+                        href="https://github.com/sponsors/mohyware"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <Heart className="w-4 h-4 mr-2" />
+                        Support Project
+                      </a>
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       )}
